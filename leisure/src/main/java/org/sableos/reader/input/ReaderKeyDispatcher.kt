@@ -12,9 +12,9 @@ import org.sableos.reader.device.DeviceProfile
  * auto-repeat of a key whose initial press was consumed stays consumed even when the policy ignores the repeat (the
  * one-shot repeat guard), so it never leaks to a focused view as a second activation.
  *
- * The [profile] fits the keys to the phone first ([DeviceKeys]): I J K L move on a phone without arrow keys.
+ * The [profile] (changeable, because the setup wizard can correct it) fits the keys to the phone first ([DeviceKeys]): I J K L move on a phone without arrow keys.
  */
-class ReaderKeyDispatcher(private val profile: DeviceProfile = DeviceProfile.OTHER) {
+class ReaderKeyDispatcher(@Volatile var profile: DeviceProfile = DeviceProfile.OTHER) {
     private var handler: ((KeyInput) -> Boolean)? = null
     private val consumedKeyCodes = mutableSetOf<Int>()
 

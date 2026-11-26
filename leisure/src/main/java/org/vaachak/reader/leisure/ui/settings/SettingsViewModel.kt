@@ -25,7 +25,6 @@ import org.vaachak.reader.core.domain.model.ReaderPreferences
 import org.sableos.reader.appearance.AppearanceChoice
 import org.sableos.reader.appearance.RecommendedPage
 import org.vaachak.reader.core.domain.model.ThemeMode
-import org.vaachak.reader.leisure.ui.reader.components.CONTRAST_WHITE
 import org.vaachak.reader.core.domain.model.TtsSettings
 import javax.inject.Inject
 
@@ -234,11 +233,7 @@ class SettingsViewModel @Inject constructor(
 
     /** Makes [page] the reading page of books that have not been given a look of their own. */
     fun useRecommendedPage(page: RecommendedPage) = viewModelScope.launch {
-        val theme = when (page) {
-            RecommendedPage.AUTOMATIC -> "light"
-            RecommendedPage.SEPIA -> "sepia"
-            RecommendedPage.WHITE_ON_BLACK -> CONTRAST_WHITE
-        }
+        val theme = org.sableos.reader.setup.AccessibilityPresets.pageThemeFor(page)
         settingsRepo.saveReaderPreferences(settingsRepo.readerPreferences.first().copy(theme = theme))
     }
 
