@@ -1,0 +1,11 @@
+Sable Reader
+Copyright 2026 The Sable Reader contributors
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE),
+except for the third-party components listed in THIRD_PARTY_NOTICES.md, which
+keep their own licences.
+
+The Reader was first written for SableOS (https://github.com/aimindseye/zinwaq25-sableos)
+and moved to this repository so it installs on any keyboard phone. Its book-handling
+core descends from Vaachak Mobile (https://github.com/vaachak-platform/vaachak-mobile);
+the files that came from it keep their own licence headers.
