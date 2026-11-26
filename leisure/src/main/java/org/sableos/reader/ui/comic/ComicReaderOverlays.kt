@@ -1,6 +1,7 @@
 // Patch history: 0080 (see docs/PATCH_HISTORY.md)
 package org.sableos.reader.ui.comic
 
+import org.sableos.reader.device.LocalDeviceProfile
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -215,7 +216,7 @@ private fun ChoiceRow(label: String, selected: Boolean, onSelect: () -> Unit) {
 
 @Composable
 private fun HintsDialog(mode: ComicReadingMode, dismiss: () -> Unit) {
-    val hints = KeyHints.forContext(KeyContext(ComicKeyPolicy.surfaceOf(mode), ReaderCapabilities.COMIC))
+    val hints = KeyHints.forContext(KeyContext(ComicKeyPolicy.surfaceOf(mode), ReaderCapabilities.COMIC, letterMoves = LocalDeviceProfile.current.letterMoves))
     AlertDialog(
         onDismissRequest = dismiss,
         title = { Text("Keyboard shortcuts") },

@@ -1,6 +1,7 @@
 // Patch history: 0080 (see docs/PATCH_HISTORY.md)
 package org.sableos.reader.ui.audio
 
+import org.sableos.reader.device.LocalDeviceProfile
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -187,7 +188,7 @@ private fun ChoiceRow(label: String, selected: Boolean, onSelect: () -> Unit) {
 
 @Composable
 private fun HintsDialog(dismiss: () -> Unit) {
-    val hints = KeyHints.forContext(KeyContext(ReaderSurface.AUDIO, ReaderCapabilities.AUDIOBOOK))
+    val hints = KeyHints.forContext(KeyContext(ReaderSurface.AUDIO, ReaderCapabilities.AUDIOBOOK, letterMoves = LocalDeviceProfile.current.letterMoves))
     AlertDialog(
         onDismissRequest = dismiss,
         title = { Text("Keyboard shortcuts") },

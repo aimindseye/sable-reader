@@ -17,14 +17,14 @@ The Reader reads which phone it runs on and fits its layout and keys to it throu
 | Phone | Screen | Status |
 | --- | --- | --- |
 | Zinwa Q25 | 720 x 720 | Designed and tested (from SableOS 2.0) |
-| Unihertz Titan 2 | 1440 x 1440 | Profile planned |
-| Unihertz Titan 2 Elite | 1080 x 1200 | Profile planned |
-| Zinwa P26 | 1440 x 1440 square | Profile planned |
-| Zinwa Q27 | 1080 x 1240 | Profile planned |
+| Unihertz Titan 2 | 1440 x 1440 | Profile ready, untested on the phone |
+| Unihertz Titan 2 Elite | 1080 x 1200 | Profile ready, untested on the phone |
+| Zinwa P26 | 1440 x 1440 square | Profile ready, untested on the phone |
+| Zinwa Q27 | 1080 x 1240 | Profile ready, untested on the phone |
 
 ## Status
 
-The SableOS 2.0 Reader has been ported: EPUB, comics (CBZ, CBR), audiobooks (M4B) and PDF, with the library keys and the Bold setting. Device profiles, theme checks and the setup wizard come next; see the [roadmap](docs/ROADMAP.md). The first release is not out yet.
+The SableOS 2.0 Reader has been ported: EPUB, comics (CBZ, CBR), audiobooks (M4B) and PDF, with the library keys and the Bold setting. Device profiles are in (phones without arrow keys move with I J K L); theme checks and the setup wizard come next; see the [roadmap](docs/ROADMAP.md). The first release is not out yet.
 
 ## Documentation
 
