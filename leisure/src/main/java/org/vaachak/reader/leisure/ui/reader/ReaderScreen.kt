@@ -2,6 +2,7 @@
 package org.vaachak.reader.leisure.ui.reader
 
 // --- MAESTRO FIX 1: Import semantics ---
+import org.sableos.reader.device.LocalDeviceProfile
 import org.sableos.reader.ui.Bb7ConfirmDialog
 import android.app.Activity
 import android.view.ActionMode
@@ -754,15 +755,19 @@ private fun TtsProblemDialog(message: String, onDismiss: () -> Unit) {
     )
 }
 
-/** The key list (K): everything the keyboard does in a book, on one screen. */
+/** The key list (K, or Q on a phone that moves with I J K L): everything the keyboard does in a book. */
 @Composable
 private fun ReaderKeyListDialog(onDismiss: () -> Unit) {
+    val letterMoves = LocalDeviceProfile.current.letterMoves
+    val turn = if (letterMoves) "J  L  turn page (or ← →)" else "← →  turn page"
+    val highlights = if (letterMoves) "G  highlights    Shift+G  bookmarks" else "L  highlights    Shift+L  bookmarks"
+    val keyList = if (letterMoves) "Q  this list" else "K  this list"
     androidx.compose.material3.AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Keys") },
         text = {
             Text(
-                "← →  turn page\n" +
+                "$turn\n" +
                     "Space / Shift+Space  forward / back\n" +
                     "Enter  show or hide the bars\n" +
                     "B  bookmark    T  contents    F  find\n" +
@@ -771,8 +776,8 @@ private fun ReaderKeyListDialog(onDismiss: () -> Unit) {
                     "M  switch theme    V  read aloud\n" +
                     ",  .  sentence back / forward    -  +  speech speed\n" +
                     "H  highlight    D  look up    N / Shift+N  find result\n" +
-                    "L  highlights    Shift+L  bookmarks\n" +
-                    "K  this list\n" +
+                    "$highlights\n" +
+                    "$keyList\n" +
                     "Esc  close, then leave",
             )
         },

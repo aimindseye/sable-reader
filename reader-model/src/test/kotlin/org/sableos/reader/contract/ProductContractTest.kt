@@ -121,11 +121,13 @@ class ProductContractTest {
     }
 
     @Test
-    fun noDeviceIdentityBranching() {
+    fun deviceIdentityIsReadInOnePlaceOnly() {
+        // Standalone Sable Reader fits its keys to the phone (docs/DEVICE_PROFILES.md). Only the device profile reader
+        // may look at the build's identity; everything else asks the DeviceProfile it provides.
         val identityFields = "MODEL|DEVICE|BRAND|MANUFACTURER|HARDWARE|PRODUCT|BOARD|FINGERPRINT|ID|SERIAL"
         val banned = Regex("""Build\.($identityFields)\b""")
         val offenders = ReaderTree.kotlinSources().filter { banned.containsMatchIn(it.readText()) }.map(ReaderTree::rel)
-        assertEquals(emptyList<String>(), offenders)
+        assertEquals(listOf("leisure/src/main/java/org/sableos/reader/device/CurrentDeviceProfile.kt"), offenders)
     }
 
     @Test

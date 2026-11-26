@@ -10,6 +10,8 @@ data class KeyContext(
     val direction: ReadingDirection = ReadingDirection.LEFT_TO_RIGHT,
     /** True while a text field owns input: printable keys and Space must reach it untouched. */
     val editableFocused: Boolean = false,
+    /** The phone moves with I J K L (no arrow keys); only changes the key names [KeyHints] shows. */
+    val letterMoves: Boolean = false,
 )
 
 /** Outcome of resolving a key: consume it as [Handled], or let the focused view receive it. */

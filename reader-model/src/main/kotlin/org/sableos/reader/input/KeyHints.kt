@@ -11,7 +11,19 @@ object KeyHints {
     private const val SPACE_KEYS = "Space / Shift+Space"
     private const val ADVANCE_REVERSE = "Advance / reverse"
 
-    fun forContext(context: KeyContext): List<KeyHint> = buildList {
+    fun forContext(context: KeyContext): List<KeyHint> = baseHints(context).map { if (context.letterMoves) forLetterMoves(it) else it }
+
+    /** On a phone without arrow keys the moves are I J K L, and K and L's old jobs sit on Q and G. */
+    private fun forLetterMoves(hint: KeyHint): KeyHint =
+        hint.copy(
+            keys = hint.keys
+                .replace("Left / Right", "J / L")
+                .replace("Up / Down", "I / K")
+                .replace("L / Shift+L", "G / Shift+G")
+                .let { if (it == "K") "Q" else it },
+        )
+
+    private fun baseHints(context: KeyContext): List<KeyHint> = buildList {
         navigationHints(context)?.let { addAll(it) }
         val caps = context.capabilities
         if (context.surface != ReaderSurface.AUDIO) add(KeyHint("Activate / Menu", "Show or hide controls"))

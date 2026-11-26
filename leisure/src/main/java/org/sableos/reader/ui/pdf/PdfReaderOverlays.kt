@@ -1,5 +1,6 @@
 package org.sableos.reader.ui.pdf
 
+import org.sableos.reader.device.LocalDeviceProfile
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -132,7 +133,7 @@ private fun BookmarkRow(bookmark: PdfBookmarkUi, viewModel: PdfReaderViewModel) 
 @Composable
 private fun PdfHintsDialog(viewModel: PdfReaderViewModel) {
     val dismiss = { viewModel.onAction(PdfUiAction.Show(PdfOverlay.NONE)) }
-    val hints = KeyHints.forContext(KeyContext(ReaderSurface.PDF_PAGED, ReaderCapabilities.PDF))
+    val hints = KeyHints.forContext(KeyContext(ReaderSurface.PDF_PAGED, ReaderCapabilities.PDF, letterMoves = LocalDeviceProfile.current.letterMoves))
     AlertDialog(
         onDismissRequest = dismiss,
         title = { Text("Keyboard shortcuts") },

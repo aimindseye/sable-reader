@@ -80,6 +80,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.sableos.reader.input.EditableFocusState
 import org.sableos.reader.input.LocalEditableFocus
+import org.sableos.reader.device.LocalDeviceProfile
+import org.sableos.reader.device.currentDeviceProfile
 import org.sableos.reader.input.LocalReaderKeyDispatcher
 import org.sableos.reader.input.ReaderKeyDispatcher
 import org.sableos.reader.layout.rememberReaderLayoutProfile
@@ -131,7 +133,8 @@ class MainActivity : AppCompatActivity() {
     private var isTtsActive = false
 
     // Activity-level keyboard routing for the active reading surface (EPUB, PDF, ...).
-    private val readerKeyDispatcher = ReaderKeyDispatcher()
+    private val deviceProfile by lazy { currentDeviceProfile(resources.configuration) }
+    private val readerKeyDispatcher by lazy { ReaderKeyDispatcher(deviceProfile) }
     private val editableFocus = EditableFocusState()
 
     private fun BookshelfUiState.findBookByHash(hash: String): BookEntity? {
@@ -184,6 +187,7 @@ class MainActivity : AppCompatActivity() {
 
         CompositionLocalProvider(
             LocalReaderKeyDispatcher provides readerKeyDispatcher,
+            LocalDeviceProfile provides deviceProfile,
             LocalEditableFocus provides editableFocus
         ) {
             // Maestro's `id:` selector maps to Android resource-id, so this must wrap
