@@ -146,7 +146,7 @@ fun BookSearchOverlay(
                 Text(
                     text = "No results found.",
                     modifier = Modifier.align(Alignment.Center),
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             } else {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -245,7 +245,7 @@ fun SearchResultItem(
         Text(
             text = locator.title ?: "Section",
             style = MaterialTheme.typography.labelSmall,
-            color = Color.Gray
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

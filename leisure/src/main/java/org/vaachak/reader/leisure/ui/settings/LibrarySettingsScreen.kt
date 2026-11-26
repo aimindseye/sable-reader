@@ -242,7 +242,7 @@ fun CoverElementToggle(label: String, isChecked: Boolean, onToggle: (Boolean) ->
         Icon(
             imageVector = if (isChecked) Icons.Default.CheckCircle else Icons.Outlined.Circle,
             contentDescription = null,
-            tint = if (isChecked) MaterialTheme.colorScheme.primary else Color.Gray,
+            tint = if (isChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(18.dp)
         )
         Spacer(Modifier.width(4.dp))

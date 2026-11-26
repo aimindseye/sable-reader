@@ -104,7 +104,7 @@ fun ReaderProfilesScreen(
             } else if (profiles.isEmpty()) {
                 // --- MAIN LIST: SHOW PROFILES ---
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No profiles found", color = Color.Gray)
+                    Text("No profiles found", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             } else {
                 LazyColumn(
@@ -180,7 +180,7 @@ private fun ChangePinForm(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-        Text("Leave New PIN blank to remove password.", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+        Text("Leave New PIN blank to remove password.", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
         if (pinError != null) {
             Spacer(modifier = Modifier.height(8.dp))

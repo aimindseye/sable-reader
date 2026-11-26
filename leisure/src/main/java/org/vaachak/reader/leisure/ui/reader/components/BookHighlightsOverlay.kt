@@ -109,7 +109,7 @@ fun BookHighlightsOverlay(
                 ) {
                     Icon(Icons.Default.Bookmark, contentDescription = "No highlights", tint = Color.Gray, modifier = Modifier.size(48.dp))
                     Spacer(Modifier.height(16.dp))
-                    Text("No highlights yet.", color = Color.Gray)
+                    Text("No highlights yet.", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             } else {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {

@@ -33,6 +33,7 @@ import org.vaachak.reader.core.domain.model.BookshelfPreferences
 import org.vaachak.reader.core.domain.model.CoverAspectRatio
 import org.vaachak.reader.core.domain.model.ReaderLookCodec
 import org.vaachak.reader.core.domain.model.ReaderPreferences
+import org.sableos.reader.appearance.AppearanceChoice
 import org.vaachak.reader.core.domain.model.ThemeMode
 import org.vaachak.reader.core.domain.model.TtsSettings
 import javax.inject.Inject
@@ -48,6 +49,8 @@ class SettingsRepository @Inject constructor(
     companion object {
         // --- APP GLOBAL SETTINGS ---
         val THEME_KEY = stringPreferencesKey("theme_mode")
+        val APPEARANCE_CHOICE_KEY = stringPreferencesKey("appearance_choice")
+        val ACCENT_KEY = stringPreferencesKey("accent_choice")
         val DICTIONARY_FOLDER_KEY = stringPreferencesKey("dictionary_folder")
         val USE_EMBEDDED_DICT = booleanPreferencesKey("use_embedded_dict")
 
@@ -125,6 +128,14 @@ class SettingsRepository @Inject constructor(
         try { ThemeMode.valueOf(name) } catch (_: Exception) { ThemeMode.LIGHT }
     }
 
+    /** The Reader's own Light/Dark choice; it follows the phone until the user picks one. */
+    val appearanceChoice: Flow<AppearanceChoice> = vaultPreferencesFlow.map { prefs ->
+        AppearanceChoice.fromStableValue(prefs[APPEARANCE_CHOICE_KEY])
+    }
+
+    /** The accent the user picked (a stable value such as "gold"), or null to follow the phone's. */
+    val accentChoice: Flow<String?> = vaultPreferencesFlow.map { prefs -> prefs[ACCENT_KEY] }
+
     // --- TTS FLOWS ---
     val ttsSettings: Flow<TtsSettings> = vaultPreferencesFlow.map { preferences ->
         TtsSettings(
@@ -192,6 +203,12 @@ class SettingsRepository @Inject constructor(
     // --- APP SETTINGS ACTIONS ---
 
     suspend fun setThemeMode(mode: ThemeMode) { editCurrentVault { it[THEME_KEY] = mode.name } }
+    suspend fun setAppearanceChoice(choice: AppearanceChoice) {
+        editCurrentVault { it[APPEARANCE_CHOICE_KEY] = choice.stableValue }
+    }
+    suspend fun setAccentChoice(stableValue: String?) {
+        editCurrentVault { if (stableValue == null) it.remove(ACCENT_KEY) else it[ACCENT_KEY] = stableValue }
+    }
     suspend fun setUseEmbeddedDictionary(enabled: Boolean) { editCurrentVault { it[USE_EMBEDDED_DICT] = enabled } }
     suspend fun setDictionaryFolder(uri: String) { editCurrentVault { it[DICTIONARY_FOLDER_KEY] = uri } }
 

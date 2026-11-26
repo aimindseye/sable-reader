@@ -102,7 +102,7 @@ fun TableOfContents(
                 modifier = Modifier.fillMaxSize().padding(padding),
                 contentAlignment = Alignment.Center
             ) {
-                Text("No table of contents found.", color = Color.Gray)
+                Text("No table of contents found.", color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         } else {
             LazyColumn(
