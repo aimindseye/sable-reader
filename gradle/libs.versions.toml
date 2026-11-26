@@ -5,7 +5,7 @@ android-targetSdk = "36"
 android-minSdk = "30"
 
 # -- App Versioning --
-app-versionCode = "2"
+# Default only: releases pass -Psable.versionName (tools/build-release.sh); versionCode is derived from it.
 app-versionName = "1.0.1"
 
 # -- Kotlin / Java --

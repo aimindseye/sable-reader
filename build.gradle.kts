@@ -16,7 +16,21 @@ plugins {
 }
 
 val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
-val appVersionName = libs.findVersion("app-versionName").get().requiredVersion
+// The release version is a build input: `-Psable.versionName=1.2.3` (what tools/build-release.sh passes) wins over the
+// default in gradle/libs.versions.toml, so a release never needs a source edit. versionCode is derived from the version
+// (major * 10000 + minor * 100 + patch) unless `-Psable.versionCode=N` is given.
+val appVersionName: String = providers.gradleProperty("sable.versionName")
+    .orElse(libs.findVersion("app-versionName").get().requiredVersion).get()
+val appVersionCode: Int = providers.gradleProperty("sable.versionCode").map { it.toInt() }.orElse(
+    appVersionName.split(".").map { it.takeWhile(Char::isDigit).toIntOrNull() ?: 0 }.let { p ->
+        p.getOrElse(0) { 0 } * 10000 + p.getOrElse(1) { 0 } * 100 + p.getOrElse(2) { 0 }
+    }
+).get()
+require(Regex("""\d+\.\d+\.\d+""").matches(appVersionName)) {
+    "sable.versionName must look like 1.2.3, got $appVersionName"
+}
+extra["appVersionName"] = appVersionName
+extra["appVersionCode"] = appVersionCode
 
 version = appVersionName
 
