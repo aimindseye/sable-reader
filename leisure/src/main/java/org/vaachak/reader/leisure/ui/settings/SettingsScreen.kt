@@ -161,6 +161,10 @@ fun GlobalSettingsTab(
             icon = Icons.Default.Contrast, title = "App-wide Theme", subtitle = "Follows SableOS Light or Dark",
             onClick = { navController.navigate("settings/app_appearance") }
         )
+        SettingsTile(
+            icon = Icons.Default.Info, title = "Run setup again", subtitle = "Reading look, phone, keys and a library check",
+            onClick = { navController.navigate(Screen.SetupAgain.route) }
+        )
     }
 
     SettingsGroup(title = "About") {

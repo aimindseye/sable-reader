@@ -70,9 +70,7 @@ fun ProfilePickerScreen(
             var newPin by remember { mutableStateOf("") }
 
             val generateRandomName = {
-                val adjectives = listOf("Quiet", "Curious", "Sleepy", "Brave", "Clever", "Cosmic", "Wandering", "Lunar", "Mystic", "Nimble")
-                val nouns = listOf("Reader", "Owl", "Fox", "Panda", "Badger", "Bear", "Cat", "Dragon", "Raven", "Wolf")
-                newName = "${adjectives.random()} ${nouns.random()}"
+                newName = org.sableos.reader.setup.ProfileNames.random()
             }
 
             Column(

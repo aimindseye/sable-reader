@@ -26,6 +26,10 @@ class RootViewModel @Inject constructor(
     val accentChoice = settingsRepository.accentChoice
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
+    /** The phone the user picked in the setup wizard, or null to use the detected one. */
+    val deviceProfileOverride = settingsRepository.deviceProfileOverride
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
     // INSTANT-PATH: Routing logic
     val hasCompletedOnboarding = vaultRepository.hasCompletedOnboarding
     val isMultiUserMode = vaultRepository.isMultiUserMode

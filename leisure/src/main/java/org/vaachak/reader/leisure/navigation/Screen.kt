@@ -42,4 +42,5 @@ sealed class Screen(val route: String) {
     data object Bookshelf : Screen("settings/bookshelf")
     data object ReaderProfiles : Screen("reader_profiles")
     data object About : Screen("settings/about")
+    data object SetupAgain : Screen("settings/setup")
 }

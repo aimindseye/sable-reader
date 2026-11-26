@@ -70,6 +70,7 @@ object SquareSettingsPlan {
                         )
                     }
                     add(SquareTile('T', "Theme", "Follows SableOS", Icons.Default.Contrast, SquareAction.Open("settings/app_appearance")))
+                    add(SquareTile('W', "Setup", "Run the wizard again", Icons.Default.Info, SquareAction.Open(Screen.SetupAgain.route)))
                     add(SquareTile('I', "About", "Version, privacy", Icons.Default.Info, SquareAction.Open(Screen.About.route)))
                 },
             ),

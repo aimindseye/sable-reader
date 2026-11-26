@@ -83,6 +83,8 @@ import org.sableos.reader.input.LocalEditableFocus
 import org.sableos.reader.device.LocalDeviceProfile
 import org.sableos.reader.device.currentDeviceProfile
 import org.sableos.reader.input.LocalReaderKeyDispatcher
+import org.sableos.reader.setup.SetupWizardScreen
+import androidx.compose.runtime.SideEffect
 import org.sableos.reader.input.ReaderKeyDispatcher
 import org.sableos.reader.layout.rememberReaderLayoutProfile
 import org.sableos.reader.model.PublicationKind
@@ -133,8 +135,8 @@ class MainActivity : AppCompatActivity() {
     private var isTtsActive = false
 
     // Activity-level keyboard routing for the active reading surface (EPUB, PDF, ...).
-    private val deviceProfile by lazy { currentDeviceProfile(resources.configuration) }
-    private val readerKeyDispatcher by lazy { ReaderKeyDispatcher(deviceProfile) }
+    private val detectedProfile by lazy { currentDeviceProfile(resources.configuration) }
+    private val readerKeyDispatcher by lazy { ReaderKeyDispatcher(detectedProfile) }
     private val editableFocus = EditableFocusState()
 
     private fun BookshelfUiState.findBookByHash(hash: String): BookEntity? {
@@ -181,6 +183,11 @@ class MainActivity : AppCompatActivity() {
         val isMultiUser by rootViewModel.isMultiUserMode.collectAsState(initial = false)
         val activeVaultId by rootViewModel.activeVaultId.collectAsState(initial = VaultRepository.DEFAULT_VAULT_ID)
 
+        // The phone: what Android says, unless the user corrected it in the setup wizard.
+        val profileOverride by rootViewModel.deviceProfileOverride.collectAsState()
+        val deviceProfile = profileOverride ?: detectedProfile
+        SideEffect { readerKeyDispatcher.profile = deviceProfile }
+
         val startDestination = remember(hasCompletedOnboarding, isMultiUser, activeVaultId) {
             startDestinationFor(hasCompletedOnboarding, isMultiUser, activeVaultId)
         }
@@ -224,22 +231,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun startDestinationFor(hasCompletedOnboarding: Boolean, isMultiUser: Boolean, activeVaultId: String): String =
         when {
-            !hasCompletedOnboarding -> PROFILE_PICKER_ROUTE
+            !hasCompletedOnboarding -> SETUP_ROUTE
             isMultiUser && activeVaultId == VaultRepository.DEFAULT_VAULT_ID -> PROFILE_PICKER_ROUTE
             else -> Screen.Library.route
         }
 
     private fun NavGraphBuilder.onboardingDestinations(navController: NavHostController) {
-        composable(WELCOME_ROUTE) {
-            val settingsViewModel: SettingsViewModel = hiltViewModel()
-            WelcomeScreen(
-                onComplete = { multi ->
-                    settingsViewModel.completeOnboarding(multi)
-                    val nextScreen = if (multi) PROFILE_PICKER_ROUTE else Screen.Library.route
-                    navController.navigate(nextScreen) {
-                        popUpTo(WELCOME_ROUTE) { inclusive = true }
-                    }
-                }
+        composable(SETUP_ROUTE) {
+            SetupWizardScreen(
+                rerun = false,
+                onFinished = {
+                    // Several people: the first reader was made and chosen in the wizard, so go straight to the library.
+                    navController.navigate(Screen.Library.route) { popUpTo(SETUP_ROUTE) { inclusive = true } }
+                },
             )
         }
 
@@ -373,6 +377,7 @@ class MainActivity : AppCompatActivity() {
         composable(Screen.Settings.route) { SettingsScreen(navController = navController) }
         composable(Screen.ReaderProfiles.route) { ReaderProfilesScreen(navController = navController) }
         composable(Screen.About.route) { AboutScreen(onBack = back) }
+        composable(Screen.SetupAgain.route) { SetupWizardScreen(rerun = true, onFinished = back) }
         composable(Screen.Appearance.route) { DefaultAppearanceScreen(onBack = back) }
         composable(Screen.TTS.route) { TtsSettingsScreen(onBack = back) }
         composable(Screen.ComicDefaults.route) { ComicDefaultsScreen(onBack = back) }
@@ -495,48 +500,9 @@ class MainActivity : AppCompatActivity() {
         readerKeyDispatcher.dispatch(event) || super.dispatchKeyEvent(event)
 
     private companion object {
-        const val WELCOME_ROUTE = "welcome"
+        const val SETUP_ROUTE = "setup"
         const val PROFILE_PICKER_ROUTE = "profile_picker"
         const val BOOK_ID_ARG = "bookId"
-    }
-}
-
-// --- NEW COMPOSABLES FOR LAUNCH FLOW ---
-
-@Composable
-fun WelcomeScreen(onComplete: (isMultiUser: Boolean) -> Unit) {
-    var isMultiUser by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier.fillMaxSize().padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Welcome to Sable Reader", style = MaterialTheme.typography.headlineLarge)
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            "Your library stays on this device. Sable Reader never connects to the internet.\n" +
-                "You can change these options later in Settings.",
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(48.dp))
-
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-            Text("Will multiple people use this app?")
-            Spacer(modifier = Modifier.weight(1f))
-            Switch(checked = isMultiUser, onCheckedChange = { isMultiUser = it })
-        }
-
-        Spacer(modifier = Modifier.height(48.dp))
-
-        Button(
-            onClick = { onComplete(isMultiUser) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Continue to Library")
-        }
     }
 }
 

@@ -19,6 +19,8 @@ import androidx.documentfile.provider.DocumentFile
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -34,6 +36,7 @@ import org.vaachak.reader.core.domain.model.CoverAspectRatio
 import org.vaachak.reader.core.domain.model.ReaderLookCodec
 import org.vaachak.reader.core.domain.model.ReaderPreferences
 import org.sableos.reader.appearance.AppearanceChoice
+import org.sableos.reader.device.DeviceProfile
 import org.vaachak.reader.core.domain.model.ThemeMode
 import org.vaachak.reader.core.domain.model.TtsSettings
 import javax.inject.Inject
@@ -51,6 +54,7 @@ class SettingsRepository @Inject constructor(
         val THEME_KEY = stringPreferencesKey("theme_mode")
         val APPEARANCE_CHOICE_KEY = stringPreferencesKey("appearance_choice")
         val ACCENT_KEY = stringPreferencesKey("accent_choice")
+        val DEVICE_PROFILE_KEY = stringPreferencesKey("device_profile_override")
         val DICTIONARY_FOLDER_KEY = stringPreferencesKey("dictionary_folder")
         val USE_EMBEDDED_DICT = booleanPreferencesKey("use_embedded_dict")
 
@@ -136,6 +140,18 @@ class SettingsRepository @Inject constructor(
     /** The accent the user picked (a stable value such as "gold"), or null to follow the phone's. */
     val accentChoice: Flow<String?> = vaultPreferencesFlow.map { prefs -> prefs[ACCENT_KEY] }
 
+    /**
+     * The phone the user said they have in the setup wizard, or null to use the detected one. It is about the device,
+     * not the reader, so it is kept in the default vault and shared by every profile.
+     */
+    val deviceProfileOverride: Flow<DeviceProfile?> = flow {
+        emitAll(
+            getVaultDataStore(VaultRepository.DEFAULT_VAULT_ID).data.map { prefs ->
+                DeviceProfile.entries.firstOrNull { it.name == prefs[DEVICE_PROFILE_KEY] }
+            },
+        )
+    }
+
     // --- TTS FLOWS ---
     val ttsSettings: Flow<TtsSettings> = vaultPreferencesFlow.map { preferences ->
         TtsSettings(
@@ -205,6 +221,11 @@ class SettingsRepository @Inject constructor(
     suspend fun setThemeMode(mode: ThemeMode) { editCurrentVault { it[THEME_KEY] = mode.name } }
     suspend fun setAppearanceChoice(choice: AppearanceChoice) {
         editCurrentVault { it[APPEARANCE_CHOICE_KEY] = choice.stableValue }
+    }
+    suspend fun setDeviceProfileOverride(profile: DeviceProfile?) {
+        getVaultDataStore(VaultRepository.DEFAULT_VAULT_ID).edit {
+            if (profile == null) it.remove(DEVICE_PROFILE_KEY) else it[DEVICE_PROFILE_KEY] = profile.name
+        }
     }
     suspend fun setAccentChoice(stableValue: String?) {
         editCurrentVault { if (stableValue == null) it.remove(ACCENT_KEY) else it[ACCENT_KEY] = stableValue }
