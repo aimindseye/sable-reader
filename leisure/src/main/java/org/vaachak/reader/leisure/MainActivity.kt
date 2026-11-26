@@ -85,7 +85,6 @@ import org.sableos.reader.input.ReaderKeyDispatcher
 import org.sableos.reader.layout.rememberReaderLayoutProfile
 import org.sableos.reader.model.PublicationKind
 import org.sableos.reader.model.PublicationTypes
-import org.sableos.reader.frames.ReportFrameCover
 import org.sableos.reader.ui.audio.AudiobookReaderScreen
 import org.sableos.reader.ui.audio.NowPlayingBar
 import org.sableos.reader.ui.backup.BackupScreen
@@ -336,7 +335,6 @@ class MainActivity : AppCompatActivity() {
 
         val loaded = book
         if (loaded != null) {
-            ReportFrameCover(loaded.title, "Reading")
             ReaderScreen(
                 initialUri = loaded.localUri,
                 initialLocatorJson = locatorJson,
