@@ -18,8 +18,8 @@ The Reader reads which phone it runs on and fits its layout and keys to it throu
 | Zinwa Q25 | 720 x 720 | Designed and tested (from SableOS 2.0) |
 | Unihertz Titan 2 | square | Profile planned |
 | Unihertz Titan 2 Elite | square | Profile planned |
-| Zinwa P26 | to be confirmed | Profile planned |
-| Zinwa Q27 | to be confirmed | Profile planned |
+| Zinwa P26 | 1440 x 1440 square | Profile planned |
+| Zinwa Q27 | 1080 x 1240 | Profile planned |
 
 ## Status
 
