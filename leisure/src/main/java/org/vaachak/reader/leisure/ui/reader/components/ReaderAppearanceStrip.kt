@@ -2,6 +2,7 @@
 
 package org.vaachak.reader.leisure.ui.reader.components
 
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -204,7 +205,15 @@ private fun StripRowLine(
             }
         } else {
             Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                Text("◀", fontSize = 14.sp, color = tint, modifier = Modifier.clickable(enabled = enabled) { onStep(-1) }.padding(horizontal = 10.dp))
+                Text(
+                    "◀",
+                    fontSize = 14.sp,
+                    color = tint,
+                    modifier = Modifier
+                        .clickable(enabled = enabled, role = Role.Button) { onStep(-1) }
+                        .semantics { contentDescription = "Previous ${row.label}" }
+                        .padding(horizontal = 10.dp),
+                )
                 Text(
                     row.options[selected].label,
                     fontSize = 13.sp,
@@ -214,7 +223,15 @@ private fun StripRowLine(
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     maxLines = 1,
                 )
-                Text("▶", fontSize = 14.sp, color = tint, modifier = Modifier.clickable(enabled = enabled) { onStep(1) }.padding(horizontal = 10.dp))
+                Text(
+                    "▶",
+                    fontSize = 14.sp,
+                    color = tint,
+                    modifier = Modifier
+                        .clickable(enabled = enabled, role = Role.Button) { onStep(1) }
+                        .semantics { contentDescription = "Next ${row.label}" }
+                        .padding(horizontal = 10.dp),
+                )
             }
         }
     }

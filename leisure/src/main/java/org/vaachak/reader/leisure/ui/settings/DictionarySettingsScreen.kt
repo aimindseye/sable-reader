@@ -22,6 +22,8 @@
 
 package org.vaachak.reader.leisure.ui.settings
 
+import androidx.compose.ui.semantics.Role
+import androidx.compose.foundation.selection.selectable
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -165,10 +167,10 @@ fun DictionarySettingsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { viewModel.setUseEmbeddedDictionary(false) }
+                            .selectable(selected = !useLocalDict, role = Role.RadioButton) { viewModel.setUseEmbeddedDictionary(false) }
                             .padding(16.dp)
                             .semantics(mergeDescendants = true) {
-                                contentDescription = "Built-in English Dictionary, ${if (!useLocalDict) "Selected" else "Not Selected"}"
+                                contentDescription = "Built-in English Dictionary"
                             }
                             .tid("dictionary_source_builtin"),
                         verticalAlignment = Alignment.CenterVertically
@@ -190,10 +192,10 @@ fun DictionarySettingsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { viewModel.setUseEmbeddedDictionary(true) }
+                            .selectable(selected = useLocalDict, role = Role.RadioButton) { viewModel.setUseEmbeddedDictionary(true) }
                             .padding(16.dp)
                             .semantics(mergeDescendants = true) {
-                                contentDescription = "Custom Dictionary (StarDict), ${if (useLocalDict) "Selected" else "Not Selected"}"
+                                contentDescription = "Custom Dictionary (StarDict)"
                             }
                             .tid("dictionary_source_custom"),
                         verticalAlignment = Alignment.CenterVertically
