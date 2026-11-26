@@ -1,5 +1,6 @@
 # Sable Reader
 
+[![Build and test](https://github.com/aimindseye/sable-reader/actions/workflows/android.yml/badge.svg)](https://github.com/aimindseye/sable-reader/actions/workflows/android.yml)
 [![Security](https://github.com/aimindseye/sable-reader/actions/workflows/security.yml/badge.svg)](https://github.com/aimindseye/sable-reader/actions/workflows/security.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=aimindseye_sable-reader&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=aimindseye_sable-reader)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
@@ -23,7 +24,7 @@ The Reader reads which phone it runs on and fits its layout and keys to it throu
 
 ## Status
 
-The repository is being set up in steps; see the [roadmap](docs/ROADMAP.md).
+The SableOS 2.0 Reader has been ported: EPUB, comics (CBZ, CBR), audiobooks (M4B) and PDF, with the library keys and the Bold setting. Device profiles, theme checks and the setup wizard come next; see the [roadmap](docs/ROADMAP.md). The first release is not out yet.
 
 ## Documentation
 
@@ -35,7 +36,14 @@ The repository is being set up in steps; see the [roadmap](docs/ROADMAP.md).
 
 ## Build
 
-You need JDK 17 and the Android SDK (platform 36). Build instructions arrive with the source port.
+You need JDK 17 and the Android SDK (platform 36). Then:
+
+```
+./gradlew :leisure:assembleSableRelease        # unsigned release APK
+./gradlew test :leisure:lintSableDebug detekt ktlintCheck
+```
+
+The app id is `org.sableos.reader`. Dependencies are pinned in `gradle/libs.versions.toml` and `gradle/verification-metadata.xml`.
 
 ## Licence
 

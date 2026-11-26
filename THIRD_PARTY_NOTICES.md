@@ -9,3 +9,5 @@ Sable Reader is Apache-2.0 (see LICENSE). These parts keep their own licences.
 | AndroidX, Jetpack Compose, Kotlin, Hilt, Room, Media3 | App framework | Apache-2.0 |
 
 The full dependency list is `gradle/libs.versions.toml`; each coordinate is pinned in `gradle/verification-metadata.xml`.
+
+Fonts bundled in `leisure/src/main/res/font` keep their own licences; the list is to be completed before the first release.
