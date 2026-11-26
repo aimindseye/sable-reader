@@ -147,7 +147,7 @@ fun AllHighlightsScreen(
                 // --- 2. LIST AREA ---
                 if (groupedHighlights.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("No highlights found.", color = Color.Gray)
+                        Text("No highlights found.", color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 } else {
                     HighlightsList(

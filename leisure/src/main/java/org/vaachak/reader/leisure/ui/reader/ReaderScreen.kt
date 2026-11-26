@@ -118,7 +118,7 @@ import org.readium.r2.shared.publication.Locator
 import org.readium.r2.shared.publication.Publication
 import org.readium.r2.shared.util.AbsoluteUrl
 import org.sableos.design.AppearanceMode
-import org.sableos.design.rememberGlobalSableAppearance
+import org.sableos.reader.appearance.LocalResolvedAppearance
 import org.vaachak.reader.core.domain.model.HighlightEntity
 import org.vaachak.reader.leisure.ui.reader.components.DictionaryBottomSheet
 import org.sableos.reader.layout.rememberReaderLayoutProfile
@@ -334,7 +334,7 @@ fun ReaderScreen(
             Box(modifier = Modifier.padding(padding).fillMaxSize(), contentAlignment = Alignment.Center) {
                 val loaded = publication
                 if (loaded == null) {
-                    CircularProgressIndicator(color = Color.Black)
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 } else {
                     EpubNavigatorHost(
                         activity = activity,
@@ -373,7 +373,7 @@ fun ReaderScreen(
 @OptIn(ExperimentalReadiumApi::class)
 @Composable
 private fun rememberEffectiveEpubPreferences(epubPreferences: EpubPreferences): EpubPreferences {
-    val sableAppearance = rememberGlobalSableAppearance()
+    val sableAppearance = LocalResolvedAppearance.current
     val systemDark = isSystemInDarkTheme()
     val sableDark =
         when (sableAppearance.mode) {
@@ -872,7 +872,7 @@ fun BookBookmarksOverlay(
         Column(modifier = Modifier.padding(padding).fillMaxSize()) {
             if (bookmarks.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No bookmarks added yet.", color = Color.Gray)
+                    Text("No bookmarks added yet.", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             } else {
                 LazyColumn(modifier = Modifier.padding(16.dp)) {
@@ -910,7 +910,7 @@ fun BookBookmarksOverlay(
                             }
                         }
                         if (i < bookmarks.size - 1) {
-                            HorizontalDivider(thickness = 0.5.dp, color = Color.Gray.copy(alpha = 0.5f))
+                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
                         }
                     }
                 }
@@ -1008,7 +1008,7 @@ fun TtsVerticalFloatingPill(
         ) {
             IconButton(onClick = onStop, modifier = Modifier.tid(Tid.Tts.stop)) { Icon(Icons.Default.Close, "Exit TTS", tint = contentColor) }
 
-            Spacer(modifier = Modifier.height(1.dp).width(24.dp).background(Color.Gray.copy(alpha = 0.5f)))
+            Spacer(modifier = Modifier.height(1.dp).width(24.dp).background(MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)))
 
             IconButton(onClick = onSkipBackward, modifier = Modifier.tid(Tid.Tts.prev)) { Icon(Icons.Default.SkipPrevious, "Previous Sentence", tint = contentColor) }
 
@@ -1029,7 +1029,7 @@ fun TtsVerticalFloatingPill(
 
             IconButton(onClick = onSkipForward, modifier = Modifier.tid(Tid.Tts.next)) { Icon(Icons.Default.SkipNext, "Next Sentence", tint = contentColor) }
 
-            Spacer(modifier = Modifier.height(1.dp).width(24.dp).background(Color.Gray.copy(alpha = 0.5f)))
+            Spacer(modifier = Modifier.height(1.dp).width(24.dp).background(MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)))
 
             IconButton(onClick = onOpenSettings, modifier = Modifier.tid(Tid.Tts.settings)) { Icon(Icons.Default.Tune, "TTS Settings", tint = contentColor) }
         }

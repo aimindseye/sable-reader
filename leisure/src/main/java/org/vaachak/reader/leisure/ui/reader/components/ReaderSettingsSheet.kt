@@ -140,7 +140,7 @@ fun ReaderSettingsSheet(
                 )
             }
 
-            HorizontalDivider(color = Color.Gray.copy(alpha = 0.1f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
 
             SettingsTabs(
                 selectedTab = selectedTab,
@@ -215,7 +215,7 @@ private fun SettingsTabs(selectedTab: Int, onSelectTab: (Int) -> Unit, container
             selectedTabIndex = selectedTab,
             containerColor = containerColor,
             contentColor = style.primaryColor,
-            divider = { HorizontalDivider(color = Color.Gray.copy(alpha = 0.1f)) }
+            divider = { HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)) }
         ) {
             Tab(
                 selected = selectedTab == 0,

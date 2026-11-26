@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.sableos.reader.comic.ComicViewSettings
@@ -21,7 +22,10 @@ import org.vaachak.reader.core.data.repository.VaultRepository
 import org.vaachak.reader.core.domain.model.BookshelfPreferences
 import org.vaachak.reader.core.domain.model.CoverAspectRatio
 import org.vaachak.reader.core.domain.model.ReaderPreferences
+import org.sableos.reader.appearance.AppearanceChoice
+import org.sableos.reader.appearance.RecommendedPage
 import org.vaachak.reader.core.domain.model.ThemeMode
+import org.vaachak.reader.leisure.ui.reader.components.CONTRAST_WHITE
 import org.vaachak.reader.core.domain.model.TtsSettings
 import javax.inject.Inject
 
@@ -80,6 +84,13 @@ class SettingsViewModel @Inject constructor(
 
     val appThemeMode: StateFlow<ThemeMode> = settingsRepo.themeMode
         .stateIn(viewModelScope, AppCoroutineConfig.eagerly, ThemeMode.LIGHT)
+
+    val appearanceChoice: StateFlow<AppearanceChoice> = settingsRepo.appearanceChoice
+        .stateIn(viewModelScope, AppCoroutineConfig.eagerly, AppearanceChoice.FOLLOW_PHONE)
+
+    /** The accent the user picked, or null to follow the phone's. */
+    val accentChoice: StateFlow<String?> = settingsRepo.accentChoice
+        .stateIn(viewModelScope, AppCoroutineConfig.eagerly, null)
 
     private val _errorMessage = MutableStateFlow<String?>(null)
 
@@ -211,6 +222,24 @@ class SettingsViewModel @Inject constructor(
 
     fun setAppTheme(mode: ThemeMode) = viewModelScope.launch {
         settingsRepo.setThemeMode(mode)
+    }
+
+    fun setAppearanceChoice(choice: AppearanceChoice) = viewModelScope.launch {
+        settingsRepo.setAppearanceChoice(choice)
+    }
+
+    fun setAccentChoice(stableValue: String?) = viewModelScope.launch {
+        settingsRepo.setAccentChoice(stableValue)
+    }
+
+    /** Makes [page] the reading page of books that have not been given a look of their own. */
+    fun useRecommendedPage(page: RecommendedPage) = viewModelScope.launch {
+        val theme = when (page) {
+            RecommendedPage.AUTOMATIC -> "light"
+            RecommendedPage.SEPIA -> "sepia"
+            RecommendedPage.WHITE_ON_BLACK -> CONTRAST_WHITE
+        }
+        settingsRepo.saveReaderPreferences(settingsRepo.readerPreferences.first().copy(theme = theme))
     }
 
     fun setGroupBySeries(enabled: Boolean) = viewModelScope.launch {

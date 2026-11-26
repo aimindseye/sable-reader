@@ -197,7 +197,9 @@ class MainActivity : AppCompatActivity() {
                     .fillMaxSize()
                     .semantics { testTagsAsResourceId = true }
             ) {
-                ProductReaderTheme {
+                val appearanceChoice by rootViewModel.appearanceChoice.collectAsState()
+                val accentChoice by rootViewModel.accentChoice.collectAsState()
+                ProductReaderTheme(choice = appearanceChoice, accent = accentChoice) {
                     val background = MaterialTheme.colorScheme.background
                     Scaffold(containerColor = background) { padding ->
                         Surface(

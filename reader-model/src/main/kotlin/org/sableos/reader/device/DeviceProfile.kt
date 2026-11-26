@@ -20,11 +20,16 @@ enum class DeviceProfile(
     val label: String,
     /** I J K L move the cursor (I up, J left, K down, L right), because the phone has no arrow keys. */
     val letterMoves: Boolean,
+    /**
+     * The screen is AMOLED, so a pure black page switches pixels off. Only phones known to have one say true; the Q27's
+     * is from press coverage. Unknown screens say false.
+     */
+    val amoled: Boolean = false,
 ) {
     Q25("Zinwa Q25", letterMoves = false),
-    Q27("Zinwa Q27", letterMoves = false),
+    Q27("Zinwa Q27", letterMoves = false, amoled = true),
     TITAN_2("Unihertz Titan 2", letterMoves = true),
-    TITAN_2_ELITE("Unihertz Titan 2 Elite", letterMoves = true),
+    TITAN_2_ELITE("Unihertz Titan 2 Elite", letterMoves = true, amoled = true),
     P26("Zinwa P26", letterMoves = true),
     KEYBOARD_NO_ARROWS("Keyboard phone", letterMoves = true),
     OTHER("This phone", letterMoves = false),
