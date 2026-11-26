@@ -5,6 +5,8 @@
 
 package org.vaachak.reader.leisure.ui.settings
 
+import androidx.compose.ui.semantics.Role
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -233,10 +235,10 @@ fun CoverElementToggle(label: String, isChecked: Boolean, onToggle: (Boolean) ->
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .clickable { onToggle(!isChecked) }
+            .toggleable(value = isChecked, role = Role.Checkbox, onValueChange = onToggle)
             .padding(horizontal = 4.dp, vertical = 8.dp)
             .semantics(mergeDescendants = true) {
-                contentDescription = "$label, ${if (isChecked) "Checked" else "Unchecked"}"
+                contentDescription = label
             }
     ) {
         Icon(

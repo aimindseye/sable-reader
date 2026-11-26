@@ -22,6 +22,8 @@
 
 package org.vaachak.reader.leisure.ui.settings
 
+import androidx.compose.ui.semantics.Role
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -140,7 +142,7 @@ fun SettingsTile(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(role = Role.Button, onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .semantics(mergeDescendants = true) {
                 contentDescription = if (subtitle != null) "$title, $subtitle" else title
@@ -389,10 +391,10 @@ fun CompactSettingsToggle(
             .border(1.dp, borderColor, RoundedCornerShape(8.dp))
             .clip(RoundedCornerShape(8.dp))
             .background(bgColor)
-            .clickable { onCheckedChange(!checked) }
+            .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange)
             .padding(12.dp)
             .semantics(mergeDescendants = true) {
-                contentDescription = "$title, $subtitle, ${if (checked) "On" else "Off"}"
+                contentDescription = "$title, $subtitle"
             },
         horizontalAlignment = Alignment.Start
     ) {
@@ -513,9 +515,9 @@ fun SettingsToggleTile(title: String, subtitle: String, checked: Boolean, onChec
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onCheckedChange(!checked) }
+            .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange)
             .semantics(mergeDescendants = true) {
-                contentDescription = "$title, $subtitle, ${if (checked) "On" else "Off"}"
+                contentDescription = "$title, $subtitle"
             }
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
