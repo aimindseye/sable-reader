@@ -1,0 +1,16 @@
+package org.vaachak.reader.core.domain.model
+
+import kotlinx.serialization.Serializable
+
+enum class CoverAspectRatio { ORIGINAL, UNIFORM }
+
+@Serializable
+data class BookshelfPreferences(
+    val groupBySeries: Boolean = true,
+
+    // NEW: Cover Style Settings (NeoReader style)
+    val coverAspectRatio: CoverAspectRatio = CoverAspectRatio.UNIFORM,
+    val showFormatBadge: Boolean = true,
+    val showFavoriteIcon: Boolean = true,
+    val showProgressBadge: Boolean = true
+)
