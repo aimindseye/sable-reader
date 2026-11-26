@@ -23,3 +23,5 @@
 -keepclassmembers class kotlinx.serialization.json.** { *; }
 # Fix for Dagger/Hilt @LazyClassKey collision in R8
 -keepnames class * extends androidx.lifecycle.ViewModel
+# slf4j binds a logger at run time when one is present; none is bundled here.
+-dontwarn org.slf4j.impl.StaticLoggerBinder

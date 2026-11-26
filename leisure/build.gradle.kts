@@ -86,6 +86,8 @@ android {
     }
 
     testOptions {
+        // Readium's Theme enum calls android.graphics.Color.parseColor when it loads; plain JVM tests only need it not to throw.
+        unitTests.isReturnDefaultValues = true
         unitTests.all {
             it.extensions.configure(JacocoTaskExtension::class.java) {
                 isIncludeNoLocationClasses = true
