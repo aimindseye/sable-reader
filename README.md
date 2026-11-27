@@ -24,7 +24,7 @@ The Reader reads which phone it runs on and fits its layout and keys to it throu
 
 ## Status
 
-The SableOS 2.0 Reader has been ported: EPUB, comics (CBZ, CBR), audiobooks (M4B) and PDF, with the library keys and the Bold setting. Device profiles are in (phones without arrow keys move with I J K L); theme checks and the setup wizard come next; see the [roadmap](docs/ROADMAP.md). The first release is not out yet.
+The SableOS 2.0 Reader has been ported: EPUB, comics (CBZ, CBR), audiobooks (M4B) and PDF, with the library keys and the Bold setting. Device profiles are in (phones without arrow keys move with I J K L); theme checks and the setup wizard come next; see the [roadmap](docs/ROADMAP.md). The first release is not out yet; releases follow [docs/RELEASING.md](docs/RELEASING.md), with notes in [docs/releases](docs/releases).
 
 ## Documentation
 
