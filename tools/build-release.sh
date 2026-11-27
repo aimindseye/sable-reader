@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Build, sign and package a Sable Reader release on the owner's computer (docs/RELEASING.md).
 #
-#   bash tools/build-release.sh KEYSTORE ALIAS VERSION
+#   bash tools/build-release.sh KEYSTORE ALIAS [VERSION]
 #
-# VERSION (such as 1.0.1, or $SABLEREADER_VERSION) is the release version. It is passed to Gradle as
-# -Psable.versionName, so no source file holds it and none needs editing first; versionCode is derived from it.
+# VERSION (such as 1.0.1 or v1.0.1, or $SABLEREADER_VERSION) is the release version. It is passed to Gradle as
+# -Psable.versionName, so a release needs no source edit; versionCode is derived from it. Without it the script
+# uses the default in gradle/libs.versions.toml (app-versionName).
 # KEYSTORE and ALIAS are required: as arguments, or as $SABLEREADER_KEYSTORE and $SABLEREADER_KEY_ALIAS.
 # The repository names no keystore. Gradle builds an unsigned release APK, then apksigner signs it. The password
 # is asked once and is never written to disk: it lives only in this script's environment while apksigner runs.
@@ -13,12 +14,17 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-usage="usage: bash tools/build-release.sh KEYSTORE ALIAS VERSION (or set SABLEREADER_KEYSTORE, SABLEREADER_KEY_ALIAS and SABLEREADER_VERSION)"
+usage="usage: bash tools/build-release.sh KEYSTORE ALIAS [VERSION] (or set SABLEREADER_KEYSTORE, SABLEREADER_KEY_ALIAS and SABLEREADER_VERSION)"
 keystore="${1:-${SABLEREADER_KEYSTORE:-}}"
 alias_name="${2:-${SABLEREADER_KEY_ALIAS:-}}"
 version="${3:-${SABLEREADER_VERSION:-}}"
 version="${version#v}"
-[[ -n "$keystore" && -n "$alias_name" && -n "$version" ]] || { echo "ERROR: $usage" >&2; exit 2; }
+[[ -n "$keystore" && -n "$alias_name" ]] || { echo "ERROR: $usage" >&2; exit 2; }
+if [[ -z "$version" ]]; then
+    version="$(sed -n 's/^app-versionName = "\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)"
+    [[ -n "$version" ]] || { echo "ERROR: no VERSION given and no app-versionName in gradle/libs.versions.toml" >&2; exit 2; }
+    echo "No VERSION given; using the default, $version."
+fi
 [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "ERROR: VERSION must look like 1.2.3, got $version" >&2; exit 2; }
 [[ -f "$keystore" ]] || { echo "ERROR: keystore not found: $keystore" >&2; exit 2; }
 if ! git diff --quiet || ! git diff --cached --quiet; then
@@ -58,8 +64,7 @@ built="$("$aapt2" dump badging "$signed" | sed -n "s/.*versionName='\([^']*\)'.*
 check="$(mktemp -d)"
 trap 'unset SABLEREADER_KS_PASS; rm -rf "$check"' EXIT
 cp "$signed" "$check/"
-ANDROID_HOME="$sdk" bash tools/check-apk.sh "$check"
-"$apksigner" verify --print-certs "$signed" | sed -n 's/.*certificate SHA-256 digest: /Signing certificate SHA-256: /p' | head -n1
+ANDROID_HOME="$sdk" bash tools/check-apk.sh --signed "$check"
 
 git rev-parse HEAD > "$out/SOURCE_COMMIT.txt"
 if command -v shasum >/dev/null 2>&1; then sum=(shasum -a 256); else sum=(sha256sum); fi
