@@ -135,7 +135,11 @@ A PDF opens the same way but has only page features: turn pages with the arrows,
 
 **Reading mode** (press A, or the Reading mode button): Pages left to right, Pages right to left (manga), Pages top to bottom, Continuous scroll, or Webtoon (seamless strip). **Fit**: Whole page or Page width. These are saved per comic; the defaults for new comics are in Settings > Audio & Comics > Reading mode and fit. T opens Contents (chapters, pages) and Bookmarks (B bookmarks the current page).
 
-**Zoom.** Spread two fingers on the screen to zoom in a step (100%, 150%, 200%) and bring them together to zoom out; a long spread or pinch jumps two steps. On the keyboard, Z or `+` zooms in, X or `-` zooms out and 0 goes back to the whole page. When a page is bigger than the screen, Up / Down / Space scroll it and Left / Right pan; Space turns the page once you reach the end of it. Zoom is not saved: each comic opens at 100%. Continuous and webtoon strips always fit the width and do not zoom.
+**Zoom.** Spread two fingers on the screen to zoom in a step (100%, 150%, 200%) and bring them together to zoom out; a long spread or pinch jumps two steps. On the keyboard, Z or `+` zooms in, X or `-` zooms out and 0 goes back to the whole page. When a page is bigger than the screen, Up / Down / Space scroll it and Left / Right pan; Space turns the page once you reach the end of it. Zoom is not saved: each comic opens at 100%.
+
+**Magnifier.** To read small lettering without zooming the page, turn on the magnifier: press **G**, or tap the magnifier button in the top bar (it turns blue while on). A round lens, about 160 dp wide, shows the spot under it at 2.5 times its size, decoded sharply from the comic file. Move it by dragging a finger or tapping, or with the arrow keys; **Space**, **G** or **Esc** turns it off. While it is on, touches move the lens instead of turning pages, and the lens works in the paged reading modes, not in continuous scroll or webtoon. It also works on a zoomed page.
+
+![The magnifier](images/comic-magnifier.png) Continuous and webtoon strips always fit the width and do not zoom.
 
 ![A zoomed comic page](images/comic-zoomed.png)
 
@@ -143,6 +147,7 @@ A PDF opens the same way but has only page features: turn pages with the arrows,
 | --- | --- |
 | Left / Right (or Right / Left in manga mode) | Turn the page |
 | Z / `+`, X / `-`, 0 | Zoom in, out, reset |
+| G | Magnifier on or off; arrows move it |
 | T | Contents |
 | A | Reading mode and fit |
 | B | Bookmark this page |

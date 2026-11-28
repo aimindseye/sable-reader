@@ -79,6 +79,10 @@ class ComicReaderViewModel @Inject constructor(
     private val problems = HashMap<Int, ComicPageProblem>()
     private val aspects = HashMap<Int, Float>()
     private var source: ComicSource? = null
+
+    /** The raw bytes of the page being read, so a zoom re-decodes without extracting it from the archive again. */
+    private var pageBytes: Pair<Int, ByteArray>? = null
+    private var lensBitmap: Triple<Int, Int, Bitmap>? = null
     private var navigator: ComicNavigator? = null
     private var openedHash: String? = null
     private var profileId: String = ""
@@ -172,15 +176,41 @@ class ComicReaderViewModel @Inject constructor(
 
     private fun decodeLocked(index: Int, targetWidth: Int, targetHeight: Int): PageResult {
         val active = source
-        val read = active?.let { runCatching { it.readPage(index) } }
+        val kept = pageBytes?.takeIf { it.first == index }?.second
+        val read = if (kept != null) Result.success(kept) else active?.let { runCatching { it.readPage(index) } }
         val error = read?.exceptionOrNull()
         if (error != null && error !is ComicPageException) throw error
         val bytes = read?.getOrNull()
+        if (bytes != null && index == mutableState.value.pageIndex) pageBytes = index to bytes
         return when {
             active == null -> PageResult.Unavailable(ComicPageProblem.UNREADABLE)
             bytes == null -> fail(index, problemOf((error as ComicPageException).failure))
             else -> decodeBytes(index, bytes, targetWidth to targetHeight, active)
         }
+    }
+
+    /**
+     * A sharper copy of page [index] for the magnifier lens, decoded for [targetWidth] x [targetHeight] and kept apart
+     * from the page cache (one at a time). Null when the page cannot be decoded.
+     */
+    suspend fun magnifierBitmap(index: Int, targetWidth: Int, targetHeight: Int): Bitmap? =
+        withContext(AppCoroutineConfig.io) {
+            decodeLock.withLock {
+                lensBitmap?.takeIf { it.first == index && it.second == targetWidth }?.let { return@withLock it.third }
+                val active = source ?: return@withLock null
+                val bytes = pageBytes?.takeIf { it.first == index }?.second
+                    ?: runCatching { active.readPage(index) }.getOrNull()
+                    ?: return@withLock null
+                val decoded = ComicBitmapDecoder.decode(bytes, targetWidth, targetHeight, active.limits)
+                (decoded as? PageDecode.Decoded)?.bitmap?.also { lensBitmap = Triple(index, targetWidth, it) }
+            }
+        }
+
+    private fun toggleMagnifier() {
+        val state = mutableState.value
+        if (state.settings.mode.isContinuous && !state.magnifier) return
+        mutableState.update { it.copy(magnifier = !it.magnifier) }
+        if (state.magnifier) viewModelScope.launch { decodeLock.withLock { lensBitmap = null } }
     }
 
     private fun decodeBytes(index: Int, bytes: ByteArray, target: Pair<Int, Int>, active: ComicSource): PageResult =
@@ -240,6 +270,13 @@ class ComicReaderViewModel @Inject constructor(
             ComicUiAction.ZoomOut -> zoomOut()
             ComicUiAction.ZoomReset -> changeZoom(ComicZoom.MIN)
             is ComicUiAction.ZoomTo -> changeZoom(action.percent)
+            ComicUiAction.ToggleMagnifier -> toggleMagnifier()
+            is ComicUiAction.MoveLens -> mutableState.update {
+                it.copy(lensX = (it.lensX + action.dx).coerceIn(0f, 1f), lensY = (it.lensY + action.dy).coerceIn(0f, 1f))
+            }
+            is ComicUiAction.SetLens -> mutableState.update {
+                it.copy(lensX = action.x.coerceIn(0f, 1f), lensY = action.y.coerceIn(0f, 1f))
+            }
         }
     }
 
@@ -329,6 +366,10 @@ class ComicReaderViewModel @Inject constructor(
     fun dismissTransientSurface(): Boolean {
         val state = mutableState.value
         return when {
+            state.magnifier -> {
+                toggleMagnifier()
+                true
+            }
             state.overlay != ComicOverlay.NONE -> {
                 mutableState.update { it.copy(overlay = ComicOverlay.NONE) }
                 true
@@ -345,6 +386,8 @@ class ComicReaderViewModel @Inject constructor(
     fun closeComic() {
         navigator?.let(::persistProgress)
         cache.clear()
+        lensBitmap = null
+        pageBytes = null
         source?.close()
         source = null
     }

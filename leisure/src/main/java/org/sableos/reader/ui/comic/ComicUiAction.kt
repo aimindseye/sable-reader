@@ -39,4 +39,11 @@ sealed interface ComicUiAction {
 
     /** A finished pinch on the touchscreen: zoom to this percent (one of [org.sableos.reader.comic.ComicZoom.steps]). */
     data class ZoomTo(val percent: Int) : ComicUiAction
+
+    /** The magnifier lens: on or off, moved by a step (fractions of the screen), or put at a spot (fractions). */
+    data object ToggleMagnifier : ComicUiAction
+
+    data class MoveLens(val dx: Float, val dy: Float) : ComicUiAction
+
+    data class SetLens(val x: Float, val y: Float) : ComicUiAction
 }

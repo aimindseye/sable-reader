@@ -15,6 +15,7 @@ import org.sableos.reader.input.LocalEditableFocus
 import org.sableos.reader.input.LocalReaderKeyDispatcher
 
 private const val LINE_SCROLL_DP = 64f
+private const val LENS_STEP = 0.04f
 
 /** Registers the comic key handler with the Activity-level dispatcher for as long as the screen is composed. */
 @Composable
@@ -31,7 +32,7 @@ internal fun ComicKeyboard(viewModel: ComicReaderViewModel, scroll: ScrollTarget
             val pageScrolls = state.settings.effectiveFit == ComicFit.FIT_WIDTH
             val zoomed = state.zoomPercent > ComicZoom.MIN
             val command = ComicKeyPolicy.decide(
-                input, state.settings.mode, editable.focused, overlayOpen, pageScrolls, zoomed,
+                input, state.settings.mode, editable.focused, overlayOpen, pageScrolls, zoomed, state.magnifier,
             )
             command?.let {
                 perform(it, viewModel, scroll, latestLeave.value, scope)
@@ -65,6 +66,11 @@ private fun perform(
         ComicKeyCommand.ZOOM_IN -> viewModel.onAction(ComicUiAction.ZoomIn)
         ComicKeyCommand.ZOOM_OUT -> viewModel.onAction(ComicUiAction.ZoomOut)
         ComicKeyCommand.ZOOM_RESET -> viewModel.onAction(ComicUiAction.ZoomReset)
+        ComicKeyCommand.TOGGLE_MAGNIFIER -> viewModel.onAction(ComicUiAction.ToggleMagnifier)
+        ComicKeyCommand.LENS_LEFT -> viewModel.onAction(ComicUiAction.MoveLens(-LENS_STEP, 0f))
+        ComicKeyCommand.LENS_RIGHT -> viewModel.onAction(ComicUiAction.MoveLens(LENS_STEP, 0f))
+        ComicKeyCommand.LENS_UP -> viewModel.onAction(ComicUiAction.MoveLens(0f, -LENS_STEP))
+        ComicKeyCommand.LENS_DOWN -> viewModel.onAction(ComicUiAction.MoveLens(0f, LENS_STEP))
         ComicKeyCommand.NEXT_PAGE -> viewModel.onAction(ComicUiAction.NextPage)
         ComicKeyCommand.PREVIOUS_PAGE -> viewModel.onAction(ComicUiAction.PreviousPage)
         ComicKeyCommand.SCROLL_LINE_DOWN -> scrollBy(scroll.line(1f))

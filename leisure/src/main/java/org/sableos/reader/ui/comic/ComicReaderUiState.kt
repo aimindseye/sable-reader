@@ -25,6 +25,10 @@ data class ComicReaderUiState(
     val layoutToken: Int = 0,
     /** Zoom of the current comic page in percent of the page-width fit; never saved, back to 100 on each open. */
     val zoomPercent: Int = 100,
+    /** The magnifier lens is on, and where its centre is, as fractions of the page area. Never saved. */
+    val magnifier: Boolean = false,
+    val lensX: Float = 0.5f,
+    val lensY: Float = 0.5f,
 ) {
     val isBookmarked: Boolean get() = bookmarks.any { it.pageIndex == pageIndex }
 

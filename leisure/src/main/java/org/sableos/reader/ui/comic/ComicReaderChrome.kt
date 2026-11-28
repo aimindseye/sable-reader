@@ -15,8 +15,10 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -81,6 +83,13 @@ internal fun ComicTopBar(
                 Icon(
                     imageVector = if (state.isBookmarked) Icons.Filled.Bookmark else Icons.Filled.BookmarkBorder,
                     contentDescription = if (state.isBookmarked) "Remove bookmark (B)" else "Bookmark this page (B)",
+                )
+            }
+            FocusIconButton(onClick = { onAction(ComicUiAction.ToggleMagnifier) }) {
+                Icon(
+                    Icons.Filled.Search,
+                    contentDescription = if (state.magnifier) "Magnifier on (G)" else "Magnifier (G)",
+                    tint = if (state.magnifier) MaterialTheme.colorScheme.primary else LocalContentColor.current,
                 )
             }
             FocusIconButton(onClick = { onAction(ComicUiAction.Show(ComicOverlay.CONTENTS)) }) {
