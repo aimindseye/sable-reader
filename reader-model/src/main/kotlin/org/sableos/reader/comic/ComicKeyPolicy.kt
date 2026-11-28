@@ -35,6 +35,8 @@ enum class ComicKeyCommand {
     LENS_RIGHT,
     LENS_UP,
     LENS_DOWN,
+    LENS_ZOOM_IN,
+    LENS_ZOOM_OUT,
 }
 
 /**
@@ -82,7 +84,7 @@ object ComicKeyPolicy {
     }
 
     /**
-     * The magnifier: G toggles it; while it is on the arrows move the lens and Space turns it off. Paged modes only;
+     * The magnifier: G toggles it; while it is on the arrows move the lens, Z/+ and X/- change its strength and Space turns it off. Paged modes only;
      * the continuous strips have no single page to magnify.
      */
     private fun magnifierKey(input: KeyInput, mode: ComicReadingMode, magnifier: Boolean): ComicKeyCommand? = when {
@@ -95,6 +97,11 @@ object ComicKeyPolicy {
         input.key == ReaderKey.UP -> ComicKeyCommand.LENS_UP
         input.key == ReaderKey.DOWN -> ComicKeyCommand.LENS_DOWN
         input.key == ReaderKey.SPACE -> ComicKeyCommand.TOGGLE_MAGNIFIER.takeUnless { input.repeated }
+        input.key == ReaderKey.CHARACTER -> when (input.character?.lowercaseChar()) {
+            'z', '+', '=' -> ComicKeyCommand.LENS_ZOOM_IN
+            'x', '-' -> ComicKeyCommand.LENS_ZOOM_OUT
+            else -> null
+        }
         else -> null
     }
 

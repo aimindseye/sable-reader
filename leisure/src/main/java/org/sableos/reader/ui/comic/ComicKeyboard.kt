@@ -67,6 +67,8 @@ private fun perform(
         ComicKeyCommand.ZOOM_OUT -> viewModel.onAction(ComicUiAction.ZoomOut)
         ComicKeyCommand.ZOOM_RESET -> viewModel.onAction(ComicUiAction.ZoomReset)
         ComicKeyCommand.TOGGLE_MAGNIFIER -> viewModel.onAction(ComicUiAction.ToggleMagnifier)
+        ComicKeyCommand.LENS_ZOOM_IN -> viewModel.onAction(ComicUiAction.LensZoomIn)
+        ComicKeyCommand.LENS_ZOOM_OUT -> viewModel.onAction(ComicUiAction.LensZoomOut)
         ComicKeyCommand.LENS_LEFT -> viewModel.onAction(ComicUiAction.MoveLens(-LENS_STEP, 0f))
         ComicKeyCommand.LENS_RIGHT -> viewModel.onAction(ComicUiAction.MoveLens(LENS_STEP, 0f))
         ComicKeyCommand.LENS_UP -> viewModel.onAction(ComicUiAction.MoveLens(0f, -LENS_STEP))

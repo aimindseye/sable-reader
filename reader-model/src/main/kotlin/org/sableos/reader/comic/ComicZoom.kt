@@ -10,6 +10,14 @@ object ComicZoom {
 
     fun zoomOut(current: Int): Int = steps.lastOrNull { it < current } ?: MIN
 
+    /** The magnifier lens strengths, as times the on-screen size of the page. */
+    val lensSteps: List<Float> = listOf(2f, 3f, 4f, 5f)
+    const val LENS_DEFAULT: Float = 3f
+
+    fun lensIn(current: Float): Float = lensSteps.firstOrNull { it > current } ?: lensSteps.last()
+
+    fun lensOut(current: Float): Float = lensSteps.lastOrNull { it < current } ?: lensSteps.first()
+
     /** A pinch that spreads the fingers by this factor or more zooms in a step; one that closes them by 1/this zooms out. */
     const val PINCH_STEP: Float = 1.25f
 

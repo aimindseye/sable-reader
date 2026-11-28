@@ -33,7 +33,7 @@ import org.sableos.reader.comic.ComicZoom
 
 private val PROBLEM_PADDING = 16.dp
 private const val DEFAULT_PAGE_ASPECT = 0.7f
-private const val LENS_MAX_WIDTH_PX = 3200
+private const val LENS_MAX_WIDTH_PX = 2400
 
 /**
  * One comic page: placeholder while decoding, the picture when ready, a plain message when this page cannot be shown.
@@ -78,7 +78,7 @@ private fun PageImage(
     val image = remember(page.bitmap) { page.bitmap.asImageBitmap() }
     val widthFit = state.settings.effectiveFit == ComicFit.FIT_WIDTH
     val aspect = page.bitmap.width.toFloat() / page.bitmap.height.coerceAtLeast(1)
-    val lensWidth = (viewportWidthPx * (if (widthFit) state.zoomPercent / ComicZoom.MIN.toFloat() else 1f) * LENS_ZOOM)
+    val lensWidth = (viewportWidthPx * (if (widthFit) state.zoomPercent / ComicZoom.MIN.toFloat() else 1f) * LENS_MAX_ZOOM)
         .toInt().coerceIn(1, LENS_MAX_WIDTH_PX)
     val sharp by produceState<ImageBitmap?>(null, index, lens, lensWidth, state.layoutToken) {
         value = if (lens) {

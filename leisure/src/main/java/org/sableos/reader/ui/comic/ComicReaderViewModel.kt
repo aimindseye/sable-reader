@@ -271,6 +271,8 @@ class ComicReaderViewModel @Inject constructor(
             ComicUiAction.ZoomReset -> changeZoom(ComicZoom.MIN)
             is ComicUiAction.ZoomTo -> changeZoom(action.percent)
             ComicUiAction.ToggleMagnifier -> toggleMagnifier()
+            ComicUiAction.LensZoomIn -> mutableState.update { it.copy(lensZoom = ComicZoom.lensIn(it.lensZoom)) }
+            ComicUiAction.LensZoomOut -> mutableState.update { it.copy(lensZoom = ComicZoom.lensOut(it.lensZoom)) }
             is ComicUiAction.MoveLens -> mutableState.update {
                 it.copy(lensX = (it.lensX + action.dx).coerceIn(0f, 1f), lensY = (it.lensY + action.dy).coerceIn(0f, 1f))
             }

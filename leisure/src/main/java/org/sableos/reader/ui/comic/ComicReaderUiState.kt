@@ -1,6 +1,7 @@
 package org.sableos.reader.ui.comic
 
 import org.sableos.reader.comic.ComicViewSettings
+import org.sableos.reader.comic.ComicZoom
 import org.sableos.reader.engine.comic.ComicChapter
 import org.sableos.reader.engine.comic.ComicOpenFailure
 
@@ -29,6 +30,8 @@ data class ComicReaderUiState(
     val magnifier: Boolean = false,
     val lensX: Float = 0.5f,
     val lensY: Float = 0.5f,
+    /** How many times the lens enlarges the page on screen. */
+    val lensZoom: Float = ComicZoom.LENS_DEFAULT,
 ) {
     val isBookmarked: Boolean get() = bookmarks.any { it.pageIndex == pageIndex }
 

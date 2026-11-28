@@ -11,9 +11,9 @@ import kotlin.math.hypot
 /**
  * Two-finger pinch on the touchscreen. It watches before the page sees the touches (so one-finger scrolling,
  * swipes and taps are untouched) and takes over only once a second finger is down. When the fingers lift, the
- * spread over the start distance goes through [ComicZoom.afterPinch] and [onZoom] gets the new percent.
+ * spread over the start distance goes through [ComicZoom.afterPinch] and [onPinch] gets the new percent.
  */
-internal fun Modifier.pinchToZoom(currentPercent: Int, onZoom: (Int) -> Unit): Modifier =
+internal fun Modifier.pinchToZoom(currentPercent: Int, onPinch: (ratio: Float, percent: Int) -> Unit): Modifier =
     pointerInput(currentPercent) {
         awaitEachGesture {
             awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
@@ -32,6 +32,9 @@ internal fun Modifier.pinchToZoom(currentPercent: Int, onZoom: (Int) -> Unit): M
                     event.changes.forEach { it.consume() }
                 }
             } while (event.changes.any { it.pressed })
-            if (pinched && startSpan > 0f && span > 0f) onZoom(ComicZoom.afterPinch(currentPercent, span / startSpan))
+            if (pinched && startSpan > 0f && span > 0f) {
+                val ratio = span / startSpan
+                onPinch(ratio, ComicZoom.afterPinch(currentPercent, ratio))
+            }
         }
     }

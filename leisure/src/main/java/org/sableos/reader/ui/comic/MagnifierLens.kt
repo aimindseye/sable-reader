@@ -22,15 +22,15 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 
-/** How much the lens enlarges the page, and the width of the lens. */
-internal const val LENS_ZOOM = 2.5f
+/** The strongest lens (see ComicZoom.lensSteps): the sharp copy is decoded for this once, whatever the setting. */
+internal const val LENS_MAX_ZOOM = 5f
 private const val LENS_DIAMETER_DP = 160
 private const val RING_WIDTH_DP = 3
 
 /**
  * A round lens over a comic page. [pageRect] is where the whole page sits in this area, in pixels (so it moves with
- * the scroll of a zoomed page); the lens shows the part of the page under its centre at [LENS_ZOOM] times the size
- * on screen. [sharp] is a higher-resolution copy of the page; until it is ready the lens uses [base], which is
+ * the scroll of a zoomed page); the lens shows the part of the page under its centre at [ComicReaderUiState.lensZoom] times the
+ * size on screen. [sharp] is a higher-resolution copy of the page; until it is ready the lens uses [base], which is
  * blurrier. Touch moves the lens: tap or drag anywhere; the arrow keys move it too (see ComicKeyboard).
  */
 @Composable
@@ -64,8 +64,8 @@ internal fun MagnifierLens(
         val centre = Offset(state.lensX * size.width, state.lensY * size.height)
         val u = ((centre.x - pageRect.left) / pageRect.width).coerceIn(0f, 1f)
         val v = ((centre.y - pageRect.top) / pageRect.height).coerceIn(0f, 1f)
-        val srcW = (diameter / LENS_ZOOM / pageRect.width * source.width).coerceIn(1f, source.width.toFloat())
-        val srcH = (diameter / LENS_ZOOM / pageRect.height * source.height).coerceIn(1f, source.height.toFloat())
+        val srcW = (diameter / state.lensZoom / pageRect.width * source.width).coerceIn(1f, source.width.toFloat())
+        val srcH = (diameter / state.lensZoom / pageRect.height * source.height).coerceIn(1f, source.height.toFloat())
         val srcX = (u * source.width - srcW / 2).coerceIn(0f, source.width - srcW)
         val srcY = (v * source.height - srcH / 2).coerceIn(0f, source.height - srcH)
         val circle = Path().apply { addOval(Rect(centre, diameter / 2)) }
