@@ -2,7 +2,7 @@
 
 How to install and use Sable Reader on a keyboard phone such as the Zinwa Q25 or the Unihertz Titan 2. The Reader opens books (EPUB), PDFs, comics (CBZ and CBR) and audiobooks (M4B). It is an offline app: it asks for no internet, no camera and no storage permission, and your library never leaves the phone.
 
-The pictures below are made with `bash tools/screenshots.sh` (see [Taking the screenshots](#taking-the-screenshots)); until a picture is added to `docs/images/` its link is empty.
+This guide follows the layout of the [Vaachak Mobile guide](https://github.com/vaachak-platform/vaachak-mobile/blob/main/docs/USER_GUIDE.md) that the Reader grew out of, without its AI and sync chapters: Sable Reader has no AI features, no account and no network. The pictures below are made with `bash tools/screenshots.sh` (see [Taking the screenshots](#taking-the-screenshots)); until a picture is added to `docs/images/` its link is empty.
 
 ## Contents
 
@@ -14,10 +14,12 @@ The pictures below are made with `bash tools/screenshots.sh` (see [Taking the sc
 6. [Reading a comic](#reading-a-comic)
 7. [Listening to an audiobook](#listening-to-an-audiobook)
 8. [Settings](#settings)
-9. [Profiles](#profiles)
-10. [Backup and restore](#backup-and-restore)
-11. [Keys at a glance](#keys-at-a-glance)
-12. [Taking the screenshots](#taking-the-screenshots)
+9. [Dictionary](#dictionary)
+10. [All highlights](#all-highlights)
+11. [Profiles](#profiles)
+12. [Backup and restore](#backup-and-restore)
+13. [Keys at a glance](#keys-at-a-glance)
+14. [Taking the screenshots](#taking-the-screenshots)
 
 ## Install
 
@@ -163,6 +165,21 @@ Settings has four pages: **App**, **Library**, **Reading** and **Audio & Comics*
 ![Theme](images/theme.png)
 
 See [THEMES.md](THEMES.md), [DEVICE_PROFILES.md](DEVICE_PROFILES.md) and [ACCESSIBILITY.md](ACCESSIBILITY.md) for the details.
+
+## Dictionary
+
+Select a word in a book and press D (or use the lookup button) to see its definition. Choose the source in Settings > Reading > Dictionary Settings:
+
+1. **Built-in English Dictionary**: simple offline definitions, nothing to set up.
+2. **Custom Dictionary (StarDict)**: pick the folder that holds your StarDict files (`.ifo`, `.idx` and `.dict`). The Reader checks the folder straight away and says if it finds no usable dictionary.
+
+![Dictionary settings](images/dictionary.png)
+
+## All highlights
+
+Press H on the library (or use the highlights button) to see every highlight from every book, grouped by book. Use the tag chips to filter, tap a highlight to jump to its page in the book, and delete the ones you no longer want. Inside a book, L opens that book's highlights and Shift+L its bookmarks.
+
+![All highlights](images/all-highlights.png)
 
 ## Profiles
 

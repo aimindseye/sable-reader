@@ -56,6 +56,8 @@ table=(
     "settings-reading|Settings > Reading"
     "settings-audio-comics|Settings > Audio & Comics"
     "theme|Settings > App > Theme"
+    "dictionary|Settings > Reading > Dictionary Settings"
+    "all-highlights|The All highlights screen (H on the library)"
     "book-page|An EPUB open on a page of text"
     "book-contents|An EPUB with the contents list open (T)"
     "book-appearance|An EPUB with the appearance sheet open (A)"
