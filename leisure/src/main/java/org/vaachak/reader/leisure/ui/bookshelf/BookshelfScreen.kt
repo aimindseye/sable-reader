@@ -98,6 +98,7 @@ import coil.request.ImageRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.sableos.reader.layout.ReaderLayoutProfile
+import org.sableos.reader.model.PublicationKind
 import org.sableos.reader.layout.rememberReaderLayoutProfile
 import org.sableos.reader.library.LibraryFilters
 import org.vaachak.reader.core.domain.model.BookEntity
@@ -134,20 +135,19 @@ private fun relinkMimeTypes(kind: String): Array<String> = when (kind) {
     else -> arrayOf(MIME_EPUB)
 }
 
-// EPUB, PDF, comic archives and audio files. Some providers report a .cbz as a generic zip or binary, so those are offered too
-// and the importer decides by file name; anything it does not recognise is refused with a message.
-private val ADD_BOOK_MIME_TYPES = arrayOf(
-    MIME_EPUB,
-    MIME_PDF,
-    MIME_COMIC,
-    MIME_CBZ,
-    MIME_COMIC_RAR,
-    MIME_CBR,
-    MIME_RAR,
-    MIME_ZIP,
-    MIME_OCTET_STREAM,
-    MIME_AUDIO,
-)
+// What the Add button offers on each tab: Books only EPUB, Comics only CBZ and CBR, Audio only M4B. The document picker
+// filters by type, not by extension, so the types a provider may report for these files are listed. Some providers report
+// a .cbz as a generic zip and a .m4b as generic binary, so those generic types are offered too for comics and audio, and the
+// importer decides by file name; anything it does not recognise is refused with a message.
+private val EPUB_PICK_TYPES = arrayOf(MIME_EPUB)
+private val COMIC_PICK_TYPES = arrayOf(MIME_COMIC, MIME_CBZ, MIME_COMIC_RAR, MIME_CBR, MIME_RAR, MIME_ZIP, MIME_OCTET_STREAM)
+private val AUDIOBOOK_PICK_TYPES = arrayOf("audio/mp4", "audio/x-m4b", "audio/m4b", "audio/x-m4a", MIME_OCTET_STREAM)
+
+private fun addMimeTypes(scope: PublicationKind?): Array<String> = when (scope) {
+    PublicationKind.COMIC -> COMIC_PICK_TYPES
+    PublicationKind.AUDIOBOOK -> AUDIOBOOK_PICK_TYPES
+    else -> EPUB_PICK_TYPES
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -275,7 +275,7 @@ fun BookshelfScreen(
                 if (selectedTab == SHELF_TAB && state.selectedStackName == null) {
                     BookshelfAddButtons(
                         onAddFolder = { folderLauncher.launch(null) },
-                        onAddBook = { launcher.launch(ADD_BOOK_MIME_TYPES) }
+                        onAddBook = { launcher.launch(addMimeTypes(state.scope)) }
                     )
                 }
             }

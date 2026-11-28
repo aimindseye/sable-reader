@@ -33,6 +33,7 @@ The SableOS 2.0 Reader has been ported: EPUB, comics (CBZ, CBR), audiobooks (M4B
 - [Themes](docs/THEMES.md): Follow phone, Light, Dark, accents and the recommended reading page.
 - [Roadmap](docs/ROADMAP.md): the port, device profiles, themes and the setup wizard.
 - [Contributing](CONTRIBUTING.md): coding standards and the CI checks.
+- [User guide](docs/USER_GUIDE.md): install, library, reading, comics, audiobooks and the screenshot script.
 - [Releasing](docs/RELEASING.md): signing on the owner's computer and publishing.
 
 ## Build

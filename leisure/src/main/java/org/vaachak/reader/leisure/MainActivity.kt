@@ -93,6 +93,7 @@ import org.sableos.reader.ui.audio.AudiobookReaderScreen
 import org.sableos.reader.ui.audio.NowPlayingBar
 import org.sableos.reader.ui.backup.BackupScreen
 import org.sableos.reader.ui.comic.ComicReaderScreen
+import org.sableos.reader.ui.SableTopBar
 import org.sableos.reader.ui.pdf.PdfReaderScreen
 import org.vaachak.reader.core.data.repository.VaultRepository
 import org.vaachak.reader.core.domain.model.BookEntity
@@ -531,92 +532,15 @@ fun MainAppScreen(
 
     Scaffold(
         topBar = {
-            Column {
-                if (!short || isMultiUser) Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(horizontal = 16.dp, vertical = if (short) 4.dp else 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Sable Reader",
-                        style = if (short) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = contentColor
-                    )
-
-                    // 3. ONLY RENDER THIS IF THEY ARE IN MULTI-USER MODE
-                    if (isMultiUser) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .tid(Tid.Vault.switchProfile)
-                                .clickable { onSwitchProfileClick() }
-                                .padding(4.dp)
-                                .semantics(mergeDescendants = true) {
-                                    contentDescription = "Switch Profile, Current: ${activeProfile?.name ?: "Guest"}"
-                                }
-                        ) {
-                            Text(
-                                text = activeProfile?.name ?: "Guest",
-                                style = MaterialTheme.typography.labelLarge,
-                                color = contentColor
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Icon(Icons.Default.AccountCircle, contentDescription = null, tint = contentColor)
-                        }
-                    }
-                }
-
-                PrimaryTabRow(
-                    selectedTabIndex = selectedTabIndex,
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                ) {
-                    tabs.forEachIndexed { index, title ->
-                        val icon = when (index) {
-                            0 -> Icons.Default.Book
-                            1 -> Icons.Outlined.Photo
-                            2 -> Icons.Default.Audiotrack
-                            3 -> Icons.Default.Settings
-                            else -> Icons.Default.Book
-                        }
-                        val tabTid = when (index) {
-                            0 -> Tid.Tabs.books
-                            1 -> Tid.Tabs.comics
-                            2 -> Tid.Tabs.audio
-                            3 -> Tid.Tabs.settings
-                            else -> Tid.Tabs.books
-                        }
-                        val tabModifier = if (index == 3) {
-                            Modifier.tids(Tid.Bookshelf.SETTINGS_TAB, Tid.Bookshelf.OPEN_SETTINGS)
-                        } else {
-                            Modifier.tid(tabTid)
-                        }.semantics(mergeDescendants = true) {
-                            contentDescription = "$title Tab, ${if (selectedTabIndex == index) "Selected" else "Not Selected"}"
-                        }
-                        // Text-only tabs are 48 dp tall instead of 72; four labels fit a 411 dp width where icons beside them do not.
-                        if (short) {
-                            Tab(
-                                selected = selectedTabIndex == index,
-                                onClick = { selectedTabIndex = index },
-                                modifier = tabModifier,
-                                text = { Text(title, maxLines = 1) }
-                            )
-                        } else {
-                            Tab(
-                                selected = selectedTabIndex == index,
-                                onClick = { selectedTabIndex = index },
-                                modifier = tabModifier,
-                                text = { Text(title) },
-                                icon = { Icon(icon, contentDescription = null) }
-                            )
-                        }
-                    }
-                }
-            }
+            SableTopBar(
+                tabs = tabs,
+                selectedIndex = selectedTabIndex,
+                onSelect = { selectedTabIndex = it },
+                profileName = activeProfile?.name ?: "Guest",
+                showProfile = isMultiUser,
+                onSwitchProfileClick = onSwitchProfileClick,
+                short = short,
+            )
         }
     ) { paddingValues ->
         Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {

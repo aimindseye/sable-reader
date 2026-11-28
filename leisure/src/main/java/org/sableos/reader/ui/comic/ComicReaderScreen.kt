@@ -77,6 +77,7 @@ private fun ComicViewport(state: ComicReaderUiState, viewModel: ComicReaderViewM
                 scroll.viewportHeightPx = it.height
                 viewModel.onViewportChanged(it.width, it.height)
             }
+            .pinchToZoom(state.zoomPercent) { viewModel.onAction(ComicUiAction.ZoomTo(it)) }
             .pointerInput(mode) {
                 detectTapGestures { offset ->
                     val width = size.width.toFloat()

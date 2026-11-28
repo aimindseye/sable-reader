@@ -239,6 +239,7 @@ class ComicReaderViewModel @Inject constructor(
             ComicUiAction.ZoomIn -> changeZoom(ComicZoom.zoomIn(mutableState.value.zoomPercent))
             ComicUiAction.ZoomOut -> zoomOut()
             ComicUiAction.ZoomReset -> changeZoom(ComicZoom.MIN)
+            is ComicUiAction.ZoomTo -> changeZoom(action.percent)
         }
     }
 

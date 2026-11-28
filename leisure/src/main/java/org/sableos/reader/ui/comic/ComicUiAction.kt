@@ -36,4 +36,7 @@ sealed interface ComicUiAction {
     data object ZoomOut : ComicUiAction
 
     data object ZoomReset : ComicUiAction
+
+    /** A finished pinch on the touchscreen: zoom to this percent (one of [org.sableos.reader.comic.ComicZoom.steps]). */
+    data class ZoomTo(val percent: Int) : ComicUiAction
 }
