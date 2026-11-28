@@ -9,4 +9,16 @@ object ComicZoom {
     fun zoomIn(current: Int): Int = steps.firstOrNull { it > current } ?: MAX
 
     fun zoomOut(current: Int): Int = steps.lastOrNull { it < current } ?: MIN
+
+    /** A pinch that spreads the fingers by this factor or more zooms in a step; one that closes them by 1/this zooms out. */
+    const val PINCH_STEP: Float = 1.25f
+
+    /** The zoom a finished pinch of the given spread ratio (end distance over start distance) leads to. */
+    fun afterPinch(current: Int, ratio: Float): Int = when {
+        ratio >= PINCH_STEP * PINCH_STEP -> MAX
+        ratio >= PINCH_STEP -> zoomIn(current)
+        ratio <= 1f / (PINCH_STEP * PINCH_STEP) -> MIN
+        ratio <= 1f / PINCH_STEP -> zoomOut(current)
+        else -> current
+    }
 }
