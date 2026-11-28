@@ -35,13 +35,13 @@ The first time you open the Reader, a short wizard asks how you read: who reads 
 
 ## The library
 
-The top bar has four tabs: Books, Comics, Audio and Settings. Books shows the whole library; Comics and Audio show the same shelf narrowed to one kind. Below the bar are the history and folder buttons, then search, selection and sort. The chips (All, Continue, Books, Comics, Audiobooks and one per language) filter the shelf. Each cover shows its kind and how far you have read; the bin on a cover removes it from the library.
+The top bar has four tabs: Books, Comics, Audio and Settings. Books shows the whole library; Comics and Audio show the same shelf narrowed to one kind. Below the bar are the history and folder buttons, then search, selection and sort. The chips (All, Continue, Books, Comics, Audiobooks and one per language) filter the shelf. Each cover shows its kind and how far you have read, and a bookmark mark if it has bookmarks; the bin on a cover removes it from the library. With Smart Stacks on (Settings > Library), books of one series or author are grouped into a stack: open it to see its books, Back to return.
 
 ![The Books tab](images/books.png)
 
 | Key | Does |
 | --- | --- |
-| S | Change the sort order |
+| S | Change the sort order: Progress, Recently added, Title, Author (the sort button's menu also lists them) |
 | F | Next filter chip |
 | C | Continue the book you were reading |
 | / | Search (type to filter, Escape to close) |
@@ -105,7 +105,27 @@ On a phone with no arrow keys (the Titan 2) I J K L move instead of the arrows.
 
 ![The key list](images/book-keys.png)
 
-PDFs open the same way and turn pages with the same keys.
+### Highlights, tags and bookmarks
+
+Select text (long-press, or move the selection with the keys), then press H. The Reader asks for a tag: General, Research, Quotes or Characters; pressing the tag's first letter (G, R, Q or C) saves the highlight with it. L opens the book's highlights; Shift+L its bookmarks. Bookmarks (B) are saved per page.
+
+### Reading aloud
+
+![Speech settings](images/speech-settings.png)
+
+Press V to have the book read aloud with Android's own text-to-speech (no network). `,` and `.` skip a sentence and `-` and `+` change the speed. The speech sheet sets speed, pitch, the highlight style and Auto-Turn Pages; the language and voice are Android's, with a shortcut to Android's text-to-speech settings. A sleep timer is in Settings > Reading > Speech & Narration.
+
+### Appearance of one book
+
+Press A (or Settings in the book's top bar) for the book's own look. **Display**: theme (Follow SableOS, Light, Dark, or Sepia as a reading-only override), font and base font size. **Layout**: Publisher Styles on keeps the book's own layout; turn it off to set Line Height, Paragraph Gap, Letter Spacing, Side Margins, Word Spacing, Paragraph Indent, alignment (for example Justify), Hyphenation and Ligatures, with a live preview. Reset Layout to Defaults undoes your changes. Defaults for every book are in Settings > Reading > Default Book Appearance.
+
+### Top bar
+
+Back, Contents, Bookmarks, Highlights, Search and Settings (under More options).
+
+### PDFs
+
+A PDF opens the same way but has only page features: turn pages with the arrows, Space or Page Up / Page Down, **T** for the page list and bookmarks, **Go to page** to jump, **B** to bookmark, **K** for the keys. PDFs have no text search, highlights, dictionary or appearance settings.
 
 ![A PDF](images/pdf-page.png)
 
@@ -113,7 +133,7 @@ PDFs open the same way and turn pages with the same keys.
 
 ![A comic page](images/comic-page.png)
 
-**Reading mode** (in the comic's settings sheet): paged left to right, paged right to left (manga), vertical pager, continuous scroll or webtoon. **Fit**: the whole page, or the page width.
+**Reading mode** (press A, or the Reading mode button): Pages left to right, Pages right to left (manga), Pages top to bottom, Continuous scroll, or Webtoon (seamless strip). **Fit**: Whole page or Page width. These are saved per comic; the defaults for new comics are in Settings > Audio & Comics > Reading mode and fit. T opens Contents (chapters, pages) and Bookmarks (B bookmarks the current page).
 
 **Zoom.** Spread two fingers on the screen to zoom in a step (100%, 150%, 200%) and bring them together to zoom out; a long spread or pinch jumps two steps. On the keyboard, Z or `+` zooms in, X or `-` zooms out and 0 goes back to the whole page. When a page is bigger than the screen, Up / Down / Space scroll it and Left / Right pan; Space turns the page once you reach the end of it. Zoom is not saved: each comic opens at 100%. Continuous and webtoon strips always fit the width and do not zoom.
 
@@ -130,18 +150,28 @@ PDFs open the same way and turn pages with the same keys.
 
 ![Comic settings](images/comic-settings.png)
 
+![Comic contents and bookmarks](images/comic-contents.png)
+
 ## Listening to an audiobook
 
-Open an M4B to start the player. Playback continues with the screen off, and the Now Playing bar stays on the shelf.
+Open an M4B to start the player. Playback continues with the screen off, and a Now Playing bar stays on the shelf. The player shows the chapter ("Chapter 3 of 20") and the time, with previous chapter, back, play/pause, forward and next chapter buttons.
 
 ![The audiobook player](images/audio-player.png)
+
+![The playback sheet](images/audio-playback.png)
 
 | Key | Does |
 | --- | --- |
 | Space | Play or pause |
-| Left / Right | Seek back / forward |
+| Left / Right | Skip back / forward by your skip lengths |
 | N / P, Page Down / Page Up | Next / previous chapter |
+| T | Chapters |
+| B | Bookmark this position |
+| A | Playback: speed, skip lengths, sleep timer |
+| K | The key list |
 | Escape or Back | Leave the player (the audio keeps playing) |
+
+**Playback sheet (A).** Speed: 0.5x, 0.75x, 1x, 1.1x, 1.25x, 1.5x, 1.75x, 2x, 2.5x or 3x. Skip back: 5, 10, 15 or 30 seconds. Skip forward: 10, 15, 30 or 60 seconds. Sleep timer: Off, 5, 10, 15, 30, 45 or 60 minutes, or End of chapter; Cancel sleep timer stops it. Defaults for new audiobooks are in Settings > Audio & Comics > Playback defaults.
 
 ![Chapters](images/audio-chapters.png)
 
@@ -151,10 +181,24 @@ Settings has four pages: **App**, **Library**, **Reading** and **Audio & Comics*
 
 ![Settings, App](images/settings.png)
 
-- **App** holds Profiles, Multi-user, Theme (Follow phone, Light, Dark, accent), Setup (run the wizard again) and About (version and privacy).
-- **Library** holds Library Settings (cover styles, Smart Stacks) and Library backup.
-- **Reading** holds Default Book Appearance (fonts, margins, page colour), Speech & Narration and Dictionary Settings.
-- **Audio & Comics** holds the comic reading mode and fit, and the audiobook playback defaults (speed and skip lengths).
+- **App**
+  - *Profiles > Reader Profiles*: add, rename and set an optional PIN for local readers (leave the new PIN blank to remove one).
+  - *Local Multi-User Mode*: separate libraries for different readers; the top bar then shows the active profile.
+  - *Appearance > App-wide Theme*: Follow phone (Light or Dark from SableOS), Light or Dark; the accent colour; and the Reading page (a recommended page colour for your theme).
+  - *Run setup again*: reading look, phone, keys and a library check.
+  - *About Sable Reader*: version, privacy (no account, no analytics, no network) and open-source notices.
+- **Library**
+  - *Library Settings (Visuals)*: cover style (Original ratio or Uniform ratio), cover element, bookshelf settings and Smart Stacks (group by author or series).
+  - *Library backup*: see [Backup and restore](#backup-and-restore).
+- **Reading**
+  - *Default Book Appearance*: Publisher Styles, font, base font size, line height, margins and page colour for every book.
+  - *Speech & Narration*: reading speed, voice pitch, Auto-Turn Pages, a sleep timer, and a shortcut to Android's text-to-speech language and voice settings.
+  - *Dictionary Settings*: see [Dictionary](#dictionary).
+- **Audio & Comics**
+  - *Comics > Reading mode and fit*: the default for a comic you open for the first time. Press A while reading to change one comic.
+  - *Audiobooks > Playback defaults*: default speed and skip lengths for an audiobook you start for the first time. Press A while listening to change one.
+
+![Reader profiles](images/profiles.png)
 
 ![Library](images/settings-library.png)
 
@@ -177,13 +221,13 @@ Select a word in a book and press D (or use the lookup button) to see its defini
 
 ## All highlights
 
-Press H on the library (or use the highlights button) to see every highlight from every book, grouped by book. Use the tag chips to filter, tap a highlight to jump to its page in the book, and delete the ones you no longer want. Inside a book, L opens that book's highlights and Shift+L its bookmarks.
+Press H on the library (or use the highlights button) to see every highlight from every book, grouped by book. Use the tag chips to filter, tap a highlight to jump to its page in the book, and delete the ones you no longer want. **Export** saves all highlights as a Markdown file (`sable-reader-highlights.md`): one heading per book, each highlight as a quote with its tag. Inside a book, L opens that book's highlights and Shift+L its bookmarks.
 
 ![All highlights](images/all-highlights.png)
 
 ## Profiles
 
-Profiles give each reader their own library, progress and settings on one phone. Turn on **Multi-user** in Settings > App to add readers and switch between them from the top bar. Off, the Reader has one library and no profile switcher.
+Profiles give each reader their own library, progress and settings on one phone. Turn on **Local Multi-User Mode** in Settings > App to add readers and switch between them from the top bar. Off, the Reader has one library and no profile switcher.
 
 ## Backup and restore
 
@@ -198,7 +242,8 @@ Settings > Library > Library backup (Create backup, Restore from backup) writes 
 | Library | S sort, F filter, C continue, / search, H highlights |
 | Book | Arrows or Space page, T contents, A appearance, S text size, B bookmark, F find, H highlight, L highlights, D dictionary, V read aloud, K keys |
 | Comic | Arrows page, Z / X / 0 zoom, A mode and fit, B bookmark |
-| Audiobook | Space play/pause, arrows seek, N / P chapter |
+| Audiobook | Space play/pause, arrows skip, N / P chapter, T chapters, B bookmark, A playback |
+| PDF | Arrows or Space page, T pages, B bookmark |
 | Anywhere | Escape or Back closes, then leaves |
 
 ## Taking the screenshots
