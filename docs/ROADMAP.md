@@ -4,6 +4,7 @@
 2. **Port** (done): bring the Reader from SableOS 2.0 (library keys, the Bold setting, comic, audiobook and PDF support) and add build, test and lint CI.
 3. **Device profiles** (done): Zinwa Q25, Unihertz Titan 2 and Titan 2 Elite, then Zinwa P26 and Q27.
 4. **Themes** (done): the e-ink theme is gone, so check every phone theme on every screen and recommend a reading background.
-5. **Setup wizard** (this step): offline note, people and random profile name, accessibility presets, phone, look, library, key tour. See `SETUP_WIZARD.md`.
-6. **Accessibility pass** (next): TalkBack over every screen, a Settings accessibility page, contrast checks.
+5. **Setup wizard** (done): offline note, people and random profile name, accessibility presets, phone, look, library, key tour. See `SETUP_WIZARD.md`.
+6. **Accessibility pass** (done in code, see `ACCESSIBILITY.md`): roles and labels on every control. Still to do: a TalkBack walk-through of every screen on a phone.
 7. **Stock-firmware polish**: no dependence on the Sable launcher or Active Frames.
+8. **First release** (next): build and sign with `tools/build-release.sh`, register `org.sableos.reader`, take the user guide's screenshots with `tools/screenshots.sh`.
