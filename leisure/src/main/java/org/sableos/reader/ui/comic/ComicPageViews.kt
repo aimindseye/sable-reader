@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -98,6 +99,7 @@ private fun PageImage(
             bitmap = image,
             contentDescription = description,
             contentScale = ContentScale.FillWidth,
+            filterQuality = FilterQuality.Medium,
             modifier = Modifier.fillMaxWidth(),
         )
         widthFit -> ScrollingPage(image, description, viewportWidthPx, state.zoomPercent, scroll, lensLayer)
@@ -106,6 +108,7 @@ private fun PageImage(
                 bitmap = image,
                 contentDescription = description,
                 contentScale = ContentScale.Fit,
+                filterQuality = FilterQuality.Medium,
                 modifier = Modifier.fillMaxSize(),
             )
             if (lensLayer != null) {
@@ -157,6 +160,7 @@ private fun ScrollingPage(
                 bitmap = image,
                 contentDescription = description,
                 contentScale = ContentScale.FillWidth,
+                filterQuality = FilterQuality.Medium,
                 modifier = Modifier.width(width),
             )
         }
