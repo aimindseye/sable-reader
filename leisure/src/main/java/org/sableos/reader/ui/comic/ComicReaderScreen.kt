@@ -77,7 +77,14 @@ private fun ComicViewport(state: ComicReaderUiState, viewModel: ComicReaderViewM
                 scroll.viewportHeightPx = it.height
                 viewModel.onViewportChanged(it.width, it.height)
             }
-            .pinchToZoom(state.zoomPercent) { viewModel.onAction(ComicUiAction.ZoomTo(it)) }
+            .pinchToZoom(state.zoomPercent) { ratio, percent ->
+                // With the magnifier on, a pinch sets the lens strength; otherwise it zooms the page.
+                when {
+                    !state.magnifier -> viewModel.onAction(ComicUiAction.ZoomTo(percent))
+                    ratio > 1f -> viewModel.onAction(ComicUiAction.LensZoomIn)
+                    else -> viewModel.onAction(ComicUiAction.LensZoomOut)
+                }
+            }
             .pointerInput(mode) {
                 detectTapGestures { offset ->
                     val width = size.width.toFloat()

@@ -69,6 +69,7 @@ table=(
     "comic-page|A comic open on a page"
     "comic-zoomed|A comic page zoomed in (pinch, or Z)"
     "comic-contents|A comic with Contents and bookmarks open (T)"
+    "comic-magnifier|A comic page with the magnifier on (G) over some lettering"
     "comic-settings|A comic with its reading mode and fit sheet open"
     "audio-player|An audiobook playing"
     "audio-playback|An audiobook with the playback sheet open (A)"

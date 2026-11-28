@@ -1,6 +1,7 @@
 package org.sableos.reader.ui.comic
 
 import org.sableos.reader.comic.ComicViewSettings
+import org.sableos.reader.comic.ComicZoom
 import org.sableos.reader.engine.comic.ComicChapter
 import org.sableos.reader.engine.comic.ComicOpenFailure
 
@@ -25,6 +26,12 @@ data class ComicReaderUiState(
     val layoutToken: Int = 0,
     /** Zoom of the current comic page in percent of the page-width fit; never saved, back to 100 on each open. */
     val zoomPercent: Int = 100,
+    /** The magnifier lens is on, and where its centre is, as fractions of the page area. Never saved. */
+    val magnifier: Boolean = false,
+    val lensX: Float = 0.5f,
+    val lensY: Float = 0.5f,
+    /** How many times the lens enlarges the page on screen. */
+    val lensZoom: Float = ComicZoom.LENS_DEFAULT,
 ) {
     val isBookmarked: Boolean get() = bookmarks.any { it.pageIndex == pageIndex }
 

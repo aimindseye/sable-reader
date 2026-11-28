@@ -30,6 +30,13 @@ enum class ComicKeyCommand {
     ZOOM_IN,
     ZOOM_OUT,
     ZOOM_RESET,
+    TOGGLE_MAGNIFIER,
+    LENS_LEFT,
+    LENS_RIGHT,
+    LENS_UP,
+    LENS_DOWN,
+    LENS_ZOOM_IN,
+    LENS_ZOOM_OUT,
 }
 
 /**
@@ -55,8 +62,10 @@ object ComicKeyPolicy {
         overlayOpen: Boolean,
         pageScrolls: Boolean = false,
         zoomed: Boolean = false,
+        magnifier: Boolean = false,
     ): ComicKeyCommand? {
         if (!editableFocused && !overlayOpen && !input.hasCommandModifier) {
+            magnifierKey(input, mode, magnifier)?.let { return it }
             pageView(input, mode, pageScrolls, zoomed)?.let { return it }
         }
         val context = KeyContext(
@@ -72,6 +81,28 @@ object ComicKeyPolicy {
             overlayOpen -> null
             else -> command(action, mode)
         }
+    }
+
+    /**
+     * The magnifier: G toggles it; while it is on the arrows move the lens, Z/+ and X/- change its strength and Space turns it off. Paged modes only;
+     * the continuous strips have no single page to magnify.
+     */
+    private fun magnifierKey(input: KeyInput, mode: ComicReadingMode, magnifier: Boolean): ComicKeyCommand? = when {
+        mode.isContinuous -> null
+        input.key == ReaderKey.CHARACTER && input.character?.lowercaseChar() == 'g' ->
+            ComicKeyCommand.TOGGLE_MAGNIFIER.takeUnless { input.repeated }
+        !magnifier -> null
+        input.key == ReaderKey.LEFT -> ComicKeyCommand.LENS_LEFT
+        input.key == ReaderKey.RIGHT -> ComicKeyCommand.LENS_RIGHT
+        input.key == ReaderKey.UP -> ComicKeyCommand.LENS_UP
+        input.key == ReaderKey.DOWN -> ComicKeyCommand.LENS_DOWN
+        input.key == ReaderKey.SPACE -> ComicKeyCommand.TOGGLE_MAGNIFIER.takeUnless { input.repeated }
+        input.key == ReaderKey.CHARACTER -> when (input.character?.lowercaseChar()) {
+            'z', '+', '=' -> ComicKeyCommand.LENS_ZOOM_IN
+            'x', '-' -> ComicKeyCommand.LENS_ZOOM_OUT
+            else -> null
+        }
+        else -> null
     }
 
     private fun pageView(

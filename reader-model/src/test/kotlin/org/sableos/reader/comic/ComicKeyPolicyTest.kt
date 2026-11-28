@@ -36,6 +36,21 @@ class ComicKeyPolicyTest {
     }
 
     @Test
+    fun theMagnifierTogglesWithGAndTheArrowsMoveItWhileOn() {
+        val m = ComicReadingMode.PAGED_LTR
+        val lens = { k: KeyInput, on: Boolean -> ComicKeyPolicy.decide(k, m, false, false, false, false, on) }
+        assertEquals(ComicKeyCommand.TOGGLE_MAGNIFIER, lens(letter('g'), false))
+        assertEquals(NEXT_PAGE, lens(key(ReaderKey.RIGHT), false))
+        assertEquals(ComicKeyCommand.LENS_RIGHT, lens(key(ReaderKey.RIGHT), true))
+        assertEquals(ComicKeyCommand.LENS_UP, lens(key(ReaderKey.UP), true))
+        assertEquals(ComicKeyCommand.TOGGLE_MAGNIFIER, lens(key(ReaderKey.SPACE), true))
+        assertEquals(ComicKeyCommand.LENS_ZOOM_IN, lens(letter('z'), true))
+        assertEquals(ComicKeyCommand.LENS_ZOOM_OUT, lens(letter('x'), true))
+        assertEquals(ComicKeyCommand.ZOOM_IN, lens(letter('z'), false))
+        assertNull(ComicKeyPolicy.decide(letter('g'), ComicReadingMode.WEBTOON, false, false))
+    }
+
+    @Test
     fun aScrollingPageScrollsWithUpDownAndSpaceAndPansWhenZoomed() {
         val m = ComicReadingMode.PAGED_LTR
         val scrolls = { k: KeyInput, zoomed: Boolean -> ComicKeyPolicy.decide(k, m, false, false, true, zoomed) }

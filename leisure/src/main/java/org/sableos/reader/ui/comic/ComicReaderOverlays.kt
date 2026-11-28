@@ -225,7 +225,7 @@ private fun HintsDialog(mode: ComicReadingMode, dismiss: () -> Unit) {
                 modifier = Modifier.verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(OVERLAY_SPACING / 2),
             ) {
-                listOf("Z / + , X / - , 0" to "Zoom in, out, reset", "Up / Down, Space" to "Scroll the page").forEach {
+                listOf("Z / + , X / - , 0" to "Zoom in, out, reset", "Up / Down, Space" to "Scroll the page", "G" to "Magnifier on or off (arrows move it, Z / X change its strength)").forEach {
                     Row(horizontalArrangement = Arrangement.spacedBy(OVERLAY_SPACING)) {
                         Text(it.first, style = MaterialTheme.typography.labelLarge)
                         Text(it.second, style = MaterialTheme.typography.bodyMedium)

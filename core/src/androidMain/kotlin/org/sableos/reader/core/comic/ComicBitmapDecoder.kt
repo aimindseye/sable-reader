@@ -44,7 +44,9 @@ object ComicBitmapDecoder {
         }
         val attempt = runCatching { BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options) }
         return when (attempt.exceptionOrNull()) {
-            null -> attempt.getOrNull()?.let { PageDecode.Decoded(it) } ?: PageDecode.Undecodable
+            // Mipmaps let the screen shrink a page that is still larger than its area without the shimmer of plain
+            // bilinear sampling, which turns hatched and halftone art into noise.
+            null -> attempt.getOrNull()?.let { it.setHasMipMap(true); PageDecode.Decoded(it) } ?: PageDecode.Undecodable
             is OutOfMemoryError -> PageDecode.OutOfMemory
             else -> PageDecode.Undecodable
         }

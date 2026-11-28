@@ -22,6 +22,9 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
@@ -31,6 +34,7 @@ import org.sableos.reader.comic.ComicZoom
 
 private val PROBLEM_PADDING = 16.dp
 private const val DEFAULT_PAGE_ASPECT = 0.7f
+private const val LENS_MAX_WIDTH_PX = 2400
 
 /**
  * One comic page: placeholder while decoding, the picture when ready, a plain message when this page cannot be shown.
@@ -56,7 +60,7 @@ internal fun ComicPage(
         when (val page = result) {
             null -> Placeholder(index, viewModel, strip)
             is PageResult.Unavailable -> ProblemMessage(index, page.problem)
-            is PageResult.Ready -> PageImage(index, state, page, strip, width, scroll.takeIf { active })
+            is PageResult.Ready -> PageImage(index, state, viewModel, page, strip, width, scroll.takeIf { active }, lens = active && state.magnifier && !strip)
         }
     }
 }
@@ -65,28 +69,57 @@ internal fun ComicPage(
 private fun PageImage(
     index: Int,
     state: ComicReaderUiState,
+    viewModel: ComicReaderViewModel,
     page: PageResult.Ready,
     strip: Boolean,
     viewportWidthPx: Int,
     scroll: ScrollTarget?,
+    lens: Boolean,
 ) {
     val image = remember(page.bitmap) { page.bitmap.asImageBitmap() }
+    val widthFit = state.settings.effectiveFit == ComicFit.FIT_WIDTH
+    val aspect = page.bitmap.width.toFloat() / page.bitmap.height.coerceAtLeast(1)
+    val lensWidth = (viewportWidthPx * (if (widthFit) state.zoomPercent / ComicZoom.MIN.toFloat() else 1f) * LENS_MAX_ZOOM)
+        .toInt().coerceIn(1, LENS_MAX_WIDTH_PX)
+    val sharp by produceState<ImageBitmap?>(null, index, lens, lensWidth, state.layoutToken) {
+        value = if (lens) {
+            viewModel.magnifierBitmap(index, lensWidth, (lensWidth / aspect).toInt().coerceAtLeast(1))?.asImageBitmap()
+        } else {
+            null
+        }
+    }
+    val lensLayer: (@Composable (Rect) -> Unit)? = if (lens) {
+        { rect -> MagnifierLens(image, sharp, rect, state, viewModel::onAction) }
+    } else {
+        null
+    }
     val description = "Page ${index + 1} of ${state.pageCount}"
     when {
         strip -> Image(
             bitmap = image,
             contentDescription = description,
             contentScale = ContentScale.FillWidth,
+            filterQuality = FilterQuality.Medium,
             modifier = Modifier.fillMaxWidth(),
         )
-        state.settings.effectiveFit == ComicFit.FIT_WIDTH ->
-            ScrollingPage(image, description, viewportWidthPx, state.zoomPercent, scroll)
-        else -> Image(
-            bitmap = image,
-            contentDescription = description,
-            contentScale = ContentScale.Fit,
-            modifier = Modifier.fillMaxSize(),
-        )
+        widthFit -> ScrollingPage(image, description, viewportWidthPx, state.zoomPercent, scroll, lensLayer)
+        else -> BoxWithConstraints(Modifier.fillMaxSize()) {
+            Image(
+                bitmap = image,
+                contentDescription = description,
+                contentScale = ContentScale.Fit,
+                filterQuality = FilterQuality.Medium,
+                modifier = Modifier.fillMaxSize(),
+            )
+            if (lensLayer != null) {
+                val w = constraints.maxWidth.toFloat()
+                val h = constraints.maxHeight.toFloat()
+                val fit = minOf(w / image.width, h / image.height)
+                val dw = image.width * fit
+                val dh = image.height * fit
+                lensLayer(Rect((w - dw) / 2, (h - dh) / 2, (w + dw) / 2, (h + dh) / 2))
+            }
+        }
     }
 }
 
@@ -98,6 +131,7 @@ private fun ScrollingPage(
     viewportWidthPx: Int,
     zoomPercent: Int,
     scroll: ScrollTarget?,
+    lens: (@Composable (Rect) -> Unit)?,
 ) {
     val vertical = rememberScrollState()
     val horizontal = rememberScrollState()
@@ -120,13 +154,23 @@ private fun ScrollingPage(
         }
     }
     val width = with(LocalDensity.current) { (viewportWidthPx * zoomPercent / ComicZoom.MIN).toDp() }
-    Box(Modifier.fillMaxSize().verticalScroll(vertical).horizontalScroll(horizontal)) {
-        Image(
-            bitmap = image,
-            contentDescription = description,
-            contentScale = ContentScale.FillWidth,
-            modifier = Modifier.width(width),
-        )
+    Box(Modifier.fillMaxSize()) {
+        Box(Modifier.fillMaxSize().verticalScroll(vertical).horizontalScroll(horizontal)) {
+            Image(
+                bitmap = image,
+                contentDescription = description,
+                contentScale = ContentScale.FillWidth,
+                filterQuality = FilterQuality.Medium,
+                modifier = Modifier.width(width),
+            )
+        }
+        if (lens != null) {
+            val pageWidth = (viewportWidthPx * zoomPercent / ComicZoom.MIN).toFloat()
+            val pageHeight = pageWidth * image.height / image.width.coerceAtLeast(1)
+            val left = -horizontal.value.toFloat()
+            val top = -vertical.value.toFloat()
+            lens(Rect(left, top, left + pageWidth, top + pageHeight))
+        }
     }
 }
 

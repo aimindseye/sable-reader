@@ -25,6 +25,15 @@ class ComicZoomTest {
     }
 
     @Test
+    fun theLensStepsStayBetweenTwoAndFiveTimes() {
+        assertEquals(4f, ComicZoom.lensIn(3f))
+        assertEquals(5f, ComicZoom.lensIn(5f))
+        assertEquals(2f, ComicZoom.lensOut(3f))
+        assertEquals(2f, ComicZoom.lensOut(2f))
+        assertEquals(3f, ComicZoom.LENS_DEFAULT)
+    }
+
+    @Test
     fun aPinchMovesOneStepOrJumpsAndSmallOnesChangeNothing() {
         assertEquals(150, ComicZoom.afterPinch(100, 1.3f))
         assertEquals(200, ComicZoom.afterPinch(100, 2f))
